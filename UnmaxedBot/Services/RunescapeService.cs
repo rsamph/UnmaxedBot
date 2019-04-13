@@ -65,25 +65,46 @@ namespace UnmaxedBot.Services
         private PriceCheckResult PriceCheck(string name)
         {
             var result = new PriceCheckResult();
+
+            var item = LocateExactMatch(name);
+            if (item != null)
+                return new PriceCheckResult() { ExactMatch = RuneMethods.getDetail(item.Id) };
+
+            item = LocateStartsWith(name);
+            if (item != null)
+                return new PriceCheckResult() { StartsWith = RuneMethods.getDetail(item.Id) };
+
+            return result;
+        }
+
+        private Item LocateExactMatch(string name)
+        {
             foreach (var category in _itemCache)
             {
                 foreach (var item in category.Items)
                 {
                     if (item.Name.Equals(name, StringComparison.OrdinalIgnoreCase))
                     {
-                        result.CachedItem = item;
-                        result.ExactMatch = RuneMethods.getDetail(item.Id);
-                        return result;
-                    }
-                    if (item.Name.StartsWith(name, StringComparison.OrdinalIgnoreCase))
-                    {
-                        result.CachedItem = item;
-                        result.StartsWith = RuneMethods.getDetail(item.Id);
-                        return result;
+                        return item;
                     }
                 }
             }
-            return result;
+            return null;
+        }
+
+        private Item LocateStartsWith(string name)
+        {
+            foreach (var category in _itemCache)
+            {
+                foreach (var item in category.Items)
+                {
+                    if (item.Name.StartsWith(name, StringComparison.OrdinalIgnoreCase))
+                    {
+                        return item;
+                    }
+                }
+            }
+            return null;
         }
     }
 }
