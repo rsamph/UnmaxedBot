@@ -60,6 +60,12 @@ namespace UnmaxedBot
                 var priceCheckResult = await _runescapeService.PriceCheckAsync(itemName);
                 await message.Channel.SendMessageAsync(priceCheckResult.ToMessage());
             }
+
+            if (message.Content == "!spaghet")
+            {
+                await message.Channel.SendMessageAsync("Loup says I'm running on spaget :)");
+                await message.Channel.SendMessageAsync(new Spaghet().ToMessage());
+            }
         }
     }
 }

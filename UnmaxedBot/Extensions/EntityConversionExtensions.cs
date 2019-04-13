@@ -14,5 +14,10 @@ namespace UnmaxedBot.Extensions
         {
             return new CommandListConverter().ToDiscordMessage(commandList);
         }
+
+        public static object ToMessage(this Spaghet spaghet)
+        {
+            return new SpaghetConverter().ToDiscordMessage(spaghet);
+        }
     }
 }
