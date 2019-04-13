@@ -7,6 +7,6 @@ namespace UnmaxedBot.Entities
     {
         public RunescapeService.Item CachedItem { get; set; }
         public Models.DetailResponse ExactMatch { get; set; }
-        public Models.DetailResponse StartsWith { get; set; }
+        public Models.DetailResponse CloseMatch { get; set; }
     }
 }

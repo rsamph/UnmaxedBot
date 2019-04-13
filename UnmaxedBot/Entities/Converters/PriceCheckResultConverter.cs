@@ -11,9 +11,9 @@ namespace UnmaxedBot.Entities.Converters
             {
                 return ToEmbed(priceCheck.ExactMatch);
             }
-            if (priceCheck.StartsWith != null)
+            if (priceCheck.CloseMatch != null)
             {
-                return ToEmbed(priceCheck.StartsWith);
+                return ToEmbed(priceCheck.CloseMatch);
             }
             return "What's this?";
         }

@@ -66,42 +66,29 @@ namespace UnmaxedBot.Services
         {
             var result = new PriceCheckResult();
 
-            var item = LocateExactMatch(name);
+            var item = FindInCache((i) => i.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
             if (item != null)
                 return new PriceCheckResult() { ExactMatch = RuneMethods.getDetail(item.Id) };
 
-            item = LocateStartsWith(name);
+            item = FindInCache((i) => i.Name.StartsWith(name, StringComparison.OrdinalIgnoreCase));
             if (item != null)
-                return new PriceCheckResult() { StartsWith = RuneMethods.getDetail(item.Id) };
+                return new PriceCheckResult() { CloseMatch = RuneMethods.getDetail(item.Id) };
+
+            item = FindInCache((i) => i.Name.Contains(name, StringComparison.OrdinalIgnoreCase));
+            if (item != null)
+                return new PriceCheckResult() { CloseMatch = RuneMethods.getDetail(item.Id) };
 
             return result;
         }
 
-        private Item LocateExactMatch(string name)
+        private Item FindInCache(Func<Item, bool> compare)
         {
             foreach (var category in _itemCache)
             {
                 foreach (var item in category.Items)
                 {
-                    if (item.Name.Equals(name, StringComparison.OrdinalIgnoreCase))
-                    {
+                    if (compare(item))
                         return item;
-                    }
-                }
-            }
-            return null;
-        }
-
-        private Item LocateStartsWith(string name)
-        {
-            foreach (var category in _itemCache)
-            {
-                foreach (var item in category.Items)
-                {
-                    if (item.Name.StartsWith(name, StringComparison.OrdinalIgnoreCase))
-                    {
-                        return item;
-                    }
                 }
             }
             return null;
