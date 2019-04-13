@@ -10,7 +10,7 @@ namespace UnmaxedBot.Entities.Converters
             var description = new StringBuilder();
             foreach (var command in commandList.Commands)
             {
-                description.Append("```");
+                description.Append("```css\n");
                 description.Append(command.Format);
                 description.Append(" : ");
                 description.Append(command.Description);
