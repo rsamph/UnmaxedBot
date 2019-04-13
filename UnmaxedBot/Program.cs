@@ -45,16 +45,17 @@ namespace UnmaxedBot
             if (message.Content.StartsWith("!pc"))
             {
                 await Log(message);
-                await message.Channel.SendMessageAsync("Hmmm interesting, let me find that for you..");
+                await message.Channel.SendMessageAsync($"Hmmm interesting {message.Author.Username}, let me find that for you..");
                 var request = message.Content.Replace("!pc", "").Trim().ToLower();
                 var priceCheckResult = await _runescapeService.PriceCheckAsync(new PriceCheckRequest(request));
                 await message.Channel.SendMessageAsync(priceCheckResult.ToMessage());
+                await message.Channel.DeleteMessageAsync(message.Id);
             }
 
             if (message.Content == "!spaghet")
             {
                 await Log(message);
-                await message.Channel.SendMessageAsync("Loup says I'm running on spaghet ;)");
+                await message.Channel.SendMessageAsync("Loup says I run on spaghet ;)");
                 await message.Channel.SendMessageAsync(new Spaghet().ToMessage());
             }
         }
