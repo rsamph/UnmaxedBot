@@ -53,6 +53,7 @@ namespace UnmaxedBot
 
             if (message.Content == "!spaghet")
             {
+                await Log(message);
                 await message.Channel.SendMessageAsync("Loup says I'm running on spaghet ;)");
                 await message.Channel.SendMessageAsync(new Spaghet().ToMessage());
             }
