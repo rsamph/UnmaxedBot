@@ -33,28 +33,18 @@ namespace UnmaxedBot
             await Task.Delay(-1);
         }
 
-        private Task Log(LogMessage msg)
-        {
-            Console.WriteLine(msg.ToString());
-            return Task.CompletedTask;
-        }
-
-        private Task Log(string msg)
-        {
-            Console.WriteLine(msg);
-            return Task.CompletedTask;
-        }
-
         private async Task MessageReceived(SocketMessage message)
         {
             if (message.Content == "!unmaxed")
             {
+                await Log(message);
                 await message.Channel.SendMessageAsync("Hello there, how can I help?");
                 await message.Channel.SendMessageAsync(new CommandList().ToMessage());
             }
 
             if (message.Content.StartsWith("!pc"))
             {
+                await Log(message);
                 await message.Channel.SendMessageAsync("Hmmm interesting, let me find that for you..");
                 var request = message.Content.Replace("!pc", "").Trim().ToLower();
                 var priceCheckResult = await _runescapeService.PriceCheckAsync(new PriceCheckRequest(request));
@@ -66,6 +56,22 @@ namespace UnmaxedBot
                 await message.Channel.SendMessageAsync("Loup says I'm running on spaghet ;)");
                 await message.Channel.SendMessageAsync(new Spaghet().ToMessage());
             }
+        }
+
+        private Task Log(SocketMessage msg)
+        {
+            var entry = new LogMessage(
+                LogSeverity.Info,
+                "Channel",
+                msg.Author.Username + ": " + msg.ToString());
+            Log(entry);
+            return Task.CompletedTask;
+        }
+
+        private Task Log(LogMessage msg)
+        {
+            Console.WriteLine(msg.ToString());
+            return Task.CompletedTask;
         }
     }
 }

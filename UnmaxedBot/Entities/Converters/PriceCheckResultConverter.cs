@@ -24,9 +24,10 @@ namespace UnmaxedBot.Entities.Converters
         {
             var description = new StringBuilder();
             description.Append(itemDetails.item.description);
+            description.Append($" [[GE]](http://services.runescape.com/m=itemdb_rs/unmaxed/viewitem?obj={itemDetails.item.id})");
             description.Append("\n");
             description.Append("```css");
-            description.Append($"\nCurrent Price: {itemDetails.item.current.price} gp");
+            description.Append($"\nCurrent Price: {itemDetails.item.current.price} gp ({itemDetails.item.today.price.Replace(" ", "")} gp)");
             if (amount.HasValue && exactPrice.HasValue)
             {
                 double totalPrice = (double)amount.Value * exactPrice.Value;
