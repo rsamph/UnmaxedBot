@@ -56,27 +56,39 @@ namespace UnmaxedBot.Services
             }
         }
 
-        public async Task<PriceCheckResult> PriceCheckAsync(string name)
+        public async Task<PriceCheckResult> PriceCheckAsync(PriceCheckRequest request)
         {
-            var asyncFunc = new Func<PriceCheckResult>(() => PriceCheck(name));
+            var asyncFunc = new Func<PriceCheckResult>(() => PriceCheck(request));
             return await Task.Run(asyncFunc);
         }
 
-        private PriceCheckResult PriceCheck(string name)
+        private PriceCheckResult PriceCheck(PriceCheckRequest request)
         {
-            var result = new PriceCheckResult();
+            var result = new PriceCheckResult() { Amount = request.Amount };
 
-            var item = FindInCache((i) => i.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
+            var item = FindInCache((i) => i.Name.Equals(request.ItemName, StringComparison.OrdinalIgnoreCase));
             if (item != null)
-                return new PriceCheckResult() { ExactMatch = RuneMethods.getDetail(item.Id) };
+            {
+                result.ExactMatch = RuneMethods.getDetail(item.Id);
+                if (request.Amount.HasValue) result.ExactPrice = RetrieveExactPrice(item);
+                return result;
+            }
 
-            item = FindInCache((i) => i.Name.StartsWith(name, StringComparison.OrdinalIgnoreCase));
+            item = FindInCache((i) => i.Name.StartsWith(request.ItemName, StringComparison.OrdinalIgnoreCase));
             if (item != null)
-                return new PriceCheckResult() { CloseMatch = RuneMethods.getDetail(item.Id) };
+            {
+                result.CloseMatch = RuneMethods.getDetail(item.Id);
+                if (request.Amount.HasValue) result.ExactPrice = RetrieveExactPrice(item);
+                return result;
+            }
 
-            item = FindInCache((i) => i.Name.Contains(name, StringComparison.OrdinalIgnoreCase));
+            item = FindInCache((i) => i.Name.Contains(request.ItemName, StringComparison.OrdinalIgnoreCase));
             if (item != null)
-                return new PriceCheckResult() { CloseMatch = RuneMethods.getDetail(item.Id) };
+            {
+                result.CloseMatch = RuneMethods.getDetail(item.Id);
+                if (request.Amount.HasValue) result.ExactPrice = RetrieveExactPrice(item);
+                return result;
+            }
 
             return result;
         }
@@ -92,6 +104,18 @@ namespace UnmaxedBot.Services
                 }
             }
             return null;
+        }
+
+        private int? RetrieveExactPrice(Item item)
+        {
+            var graph = RuneMethods.getGraph(item.Id);
+            if (graph == null) return null;
+
+            var latestPrice = graph.daily.GraphPoints
+                .OrderByDescending(g => g.date).FirstOrDefault();
+            if (latestPrice == null) return null;
+
+            return latestPrice.price;
         }
     }
 }

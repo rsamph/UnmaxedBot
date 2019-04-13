@@ -56,8 +56,8 @@ namespace UnmaxedBot
             if (message.Content.StartsWith("!pc"))
             {
                 await message.Channel.SendMessageAsync("Hmmm interesting, let me find that for you..");
-                var itemName = message.Content.Replace("!pc", "").Trim().ToLower();
-                var priceCheckResult = await _runescapeService.PriceCheckAsync(itemName);
+                var request = message.Content.Replace("!pc", "").Trim().ToLower();
+                var priceCheckResult = await _runescapeService.PriceCheckAsync(new PriceCheckRequest(request));
                 await message.Channel.SendMessageAsync(priceCheckResult.ToMessage());
             }
 
