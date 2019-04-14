@@ -5,9 +5,9 @@ using UnmaxedBot.Libraries.Runesharp;
 
 namespace UnmaxedBot.Entities.Converters
 {
-    public class PriceCheckResultConverter : GenericEntityConverter<PriceCheckResult, object>
+    public class PriceCheckResultConverter : IEntityConverter<PriceCheckResult>
     {
-        public override object ToDiscordMessage(PriceCheckResult priceCheck)
+        public object ConvertToMessage(PriceCheckResult priceCheck)
         {
             if (priceCheck.ExactMatch != null)
             {

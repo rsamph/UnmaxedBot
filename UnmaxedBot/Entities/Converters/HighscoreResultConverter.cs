@@ -6,9 +6,9 @@ using UnmaxedBot.Entities.Highscores;
 
 namespace UnmaxedBot.Entities.Converters
 {
-    public class HighscoreResultConverter : GenericEntityConverter<HighscoreResult, object>
+    public class HighscoreResultConverter : IEntityConverter<HighscoreResult>
     {
-        public override object ToDiscordMessage(HighscoreResult highscore)
+        public object ConvertToMessage(HighscoreResult highscore)
         {
             if (!highscore.Found)
             {

@@ -1,7 +1,11 @@
 ﻿using System.Collections.Generic;
+using UnmaxedBot.Entities.Converters;
 
 namespace UnmaxedBot.Entities
 {
+    /// <summary>
+    /// Todo: have this class removed by using command service to create a command list
+    /// </summary>
     public class CommandList : IEntity
     {
         public string Version => GetType().Assembly.GetName().Version.ToString();
@@ -24,6 +28,11 @@ namespace UnmaxedBot.Entities
                 new Command { Name = "clues", Format = "!clues {player name}", Description = "Shows the clues done by that player" },
                 new Command { Name = "spaghet", Format = "!spaghet", Description = "Gives you a link to my spaghet" }
             };
+        }
+
+        public object ToMessage()
+        {
+            return new CommandListConverter().ConvertToMessage(this);
         }
     }
 }

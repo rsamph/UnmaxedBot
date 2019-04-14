@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using UnmaxedBot.Entities.Converters;
 using UnmaxedBot.Entities.Highscores;
 
 namespace UnmaxedBot.Entities
@@ -17,6 +18,11 @@ namespace UnmaxedBot.Entities
         {
             Skills = new List<HighscoreSkill>();
             Activities = new List<HighscoreActivity>();
+        }
+
+        public object ToMessage()
+        {
+            return new HighscoreResultConverter().ConvertToMessage(this);
         }
     }
 }

@@ -3,9 +3,9 @@ using System.Text;
 
 namespace UnmaxedBot.Entities.Converters
 {
-    public class CommandListConverter : GenericEntityConverter<CommandList, object>
+    public class CommandListConverter : IEntityConverter<CommandList>
     {
-        public override object ToDiscordMessage(CommandList commandList)
+        public object ConvertToMessage(CommandList commandList)
         {
             var description = new StringBuilder();
             foreach (var command in commandList.Commands)

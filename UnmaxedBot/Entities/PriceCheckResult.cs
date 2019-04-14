@@ -1,4 +1,5 @@
-﻿using UnmaxedBot.Libraries.Runesharp;
+﻿using UnmaxedBot.Entities.Converters;
+using UnmaxedBot.Libraries.Runesharp;
 using UnmaxedBot.Services;
 
 namespace UnmaxedBot.Entities
@@ -10,5 +11,10 @@ namespace UnmaxedBot.Entities
         public Models.DetailResponse CloseMatch { get; set; }
         public int? ExactPrice { get; set; }
         public int? Amount { get; set; }
+
+        public object ToMessage()
+        {
+            return new PriceCheckResultConverter().ConvertToMessage(this);
+        }
     }
 }

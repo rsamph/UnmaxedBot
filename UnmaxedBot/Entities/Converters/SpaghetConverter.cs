@@ -2,9 +2,9 @@
 
 namespace UnmaxedBot.Entities.Converters
 {
-    class SpaghetConverter : GenericEntityConverter<Spaghet, object>
+    public class SpaghetConverter : IEntityConverter<Spaghet>
     {
-        public override object ToDiscordMessage(Spaghet spaghet)
+        public object ConvertToMessage(Spaghet spaghet)
         {
             var builder = new EmbedBuilder()
                 .WithAuthor("Github")
