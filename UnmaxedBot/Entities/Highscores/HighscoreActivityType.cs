@@ -1,0 +1,36 @@
+﻿namespace UnmaxedBot.Entities.Highscores
+{
+    public enum HighscoreActivityType
+    {
+        BountyHunter,
+        BhRogues,
+        DominionTower,
+        TheCrucible,
+        CastleWars,
+        BaAttackers,
+        BaDefenders,
+        BaCollectors,
+        BaHealers,
+        DuelTournament,
+        MobilisingArmies,
+        Conquest,
+        FistOfGuthix,
+        GgAthletics,
+        GgResourceRace,
+        We2ArmadylContrib,
+        We2BandosContrib,
+        We2ArmadylPvp,
+        We2BandosPvp,
+        HeistGuardLevel,
+        HeistRobberLevel,
+        Cfp5GameAverage,
+        Af15CowTipping,
+        Af15RatsKilled,
+        Runescore,
+        ClueScrollsEasy,
+        ClueScrollsMedium,
+        ClueScrollsHard,
+        ClueScrollsElite,
+        ClueScrollsMaster
+    }
+}

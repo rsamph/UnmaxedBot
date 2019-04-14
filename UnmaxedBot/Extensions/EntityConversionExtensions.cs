@@ -19,5 +19,10 @@ namespace UnmaxedBot.Extensions
         {
             return new SpaghetConverter().ToDiscordMessage(spaghet);
         }
+
+        public static object ToMessage(this HighscoreResult highscore)
+        {
+            return new HighscoreResultConverter().ToDiscordMessage(highscore);
+        }
     }
 }

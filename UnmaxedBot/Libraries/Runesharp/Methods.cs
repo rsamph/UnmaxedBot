@@ -9,7 +9,7 @@ namespace UnmaxedBot.Libraries.Runesharp
 {
     public static class RuneMethods
     {
-        private static string getRuneJSONResponse(string URI)
+        public static string getRuneJSONResponse(string URI)
         {
             // Create a request for the URL. 
             WebRequest request = WebRequest.Create(URI);

@@ -1,0 +1,34 @@
+﻿namespace UnmaxedBot.Entities.Highscores
+{
+    public enum HighscoreSkillType
+    {
+        Overall,
+        Attack,
+        Defense,
+        Strength,
+        Consitution,
+        Ranged,
+        Prayer,
+        Magic,
+        Cooking,
+        Woodcutting,
+        Fletching,
+        Fishing,
+        Firemaking,
+        Crafting,
+        Smithing,
+        Mining,
+        Herblore,
+        Agility,
+        Thieving,
+        Slayer,
+        Farming,
+        Runecrafting,
+        Hunter,
+        Construction,
+        Summoning,
+        Dungeoneering,
+        Divination,
+        Invention
+    }
+}

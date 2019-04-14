@@ -38,8 +38,9 @@ namespace UnmaxedBot
             if (message.Content == "!unmaxed")
             {
                 await Log(message);
-                await message.Channel.SendMessageAsync("Hello there, how can I help?");
+                await message.Channel.SendMessageAsync($"Hello there {message.Author.Username}, how can I help?");
                 await message.Channel.SendMessageAsync(new CommandList().ToMessage());
+                await message.Channel.DeleteMessageAsync(message.Id);
             }
 
             if (message.Content.StartsWith("!pc"))
@@ -52,11 +53,23 @@ namespace UnmaxedBot
                 await message.Channel.DeleteMessageAsync(message.Id);
             }
 
+            if (message.Content.StartsWith("!rank"))
+            {
+                await Log(message);
+                var userName = message.Content.Replace("!rank", "").Trim().ToLower();
+                if (userName.Length == 0) userName = message.Author.Username;
+                var request = new HighScoreRequest { UserName = userName, RequestType = HighScoreRequestType.Clues };
+                var highscoreResult = await _runescapeService.GetHighscoreAsync(request);
+                await message.Channel.SendMessageAsync(highscoreResult.ToMessage());
+                await message.Channel.DeleteMessageAsync(message.Id);
+            }
+
             if (message.Content == "!spaghet")
             {
                 await Log(message);
-                await message.Channel.SendMessageAsync("Loup says I run on spaghet ;)");
+                await message.Channel.SendMessageAsync($"Hi {message.Author.Username}, Loup says I run on spaghet ;)");
                 await message.Channel.SendMessageAsync(new Spaghet().ToMessage());
+                await message.Channel.DeleteMessageAsync(message.Id);
             }
         }
 
