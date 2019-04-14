@@ -42,7 +42,7 @@ namespace UnmaxedBot.Entities.Converters
             description.Append("```");
 
             var builder = new EmbedBuilder()
-                .WithAuthor("Clue ranking for " + highscore.UserName)
+                .WithAuthor("Player: " + highscore.UserName)
                 .WithDescription(description.ToString())
                 .WithColor(Color.DarkRed)
                 .WithThumbnailUrl("https://runescape.wiki/images/thumb/d/df/Clue_scroll_detail.png/100px-Clue_scroll_detail.png")

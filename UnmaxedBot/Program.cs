@@ -53,10 +53,11 @@ namespace UnmaxedBot
                 await message.Channel.DeleteMessageAsync(message.Id);
             }
 
-            if (message.Content.StartsWith("!rank"))
+            if (message.Content.StartsWith("!clues"))
             {
                 await Log(message);
-                var userName = message.Content.Replace("!rank", "").Trim().ToLower();
+                await message.Channel.SendMessageAsync($"Hi {message.Author.Username}, here's what I found:");
+                var userName = message.Content.Replace("!clues", "").Trim().ToLower();
                 if (userName.Length == 0) userName = message.Author.Username;
                 var request = new HighScoreRequest { UserName = userName, RequestType = HighScoreRequestType.Clues };
                 var highscoreResult = await _runescapeService.GetHighscoreAsync(request);

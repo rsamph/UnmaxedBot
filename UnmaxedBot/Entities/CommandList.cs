@@ -17,11 +17,13 @@ namespace UnmaxedBot.Entities
 
         public CommandList()
         {
-            Commands = new List<Command>();
-            Commands.Add(new Command { Name = "unmaxed", Format = "!unmaxed", Description = "Shows the list of available commands" });
-            Commands.Add(new Command { Name = "pc", Format = "!pc {amount} <item name>", Description = "Checks the current price of an item (amount is optional)" });
-            Commands.Add(new Command { Name = "rank", Format = "!rank {username}", Description = "Shows the player's ranking (wip, currently only clues are supported)" });
-            Commands.Add(new Command { Name = "spaghet", Format = "!spaghet", Description = "Gives you a link to my spaghet" });
+            Commands = new List<Command>
+            {
+                new Command { Name = "unmaxed", Format = "!unmaxed", Description = "Shows the list of available commands" },
+                new Command { Name = "pc", Format = "!pc {amount} <item name>", Description = "Checks the current price of an item" },
+                new Command { Name = "clues", Format = "!clues {player name}", Description = "Shows the clues done by that player" },
+                new Command { Name = "spaghet", Format = "!spaghet", Description = "Gives you a link to my spaghet" }
+            };
         }
     }
 }
