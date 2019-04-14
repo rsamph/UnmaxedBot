@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using UnmaxedBot.Entities.Highscores;
 
 namespace UnmaxedBot.Entities
@@ -10,6 +11,7 @@ namespace UnmaxedBot.Entities
         public List<HighscoreSkill> Skills { get; set; }
         public List<HighscoreActivity> Activities { get; set; }
         public string Version => GetType().Assembly.GetName().Version.ToString();
+        public bool Found => Skills.Any() || Activities.Any();
 
         public HighscoreResult()
         {

@@ -10,6 +10,11 @@ namespace UnmaxedBot.Entities.Converters
     {
         public override object ToDiscordMessage(HighscoreResult highscore)
         {
+            if (!highscore.Found)
+            {
+                return $"Sorry I could not find any highscores for player {highscore.UserName}";
+            }
+
             if (highscore.RequestType == HighScoreRequestType.Clues)
             {
                 var activities = new List<HighscoreActivityType>

@@ -9,6 +9,9 @@ namespace UnmaxedBot.Libraries.Runesharp
 {
     public static class RuneMethods
     {
+        /// <summary>
+        /// Todo: refactor this method (preferably all)
+        /// </summary>
         public static string getRuneJSONResponse(string URI)
         {
             // Create a request for the URL. 
@@ -16,7 +19,15 @@ namespace UnmaxedBot.Libraries.Runesharp
             // If required by the server, set the credentials.
             request.Credentials = CredentialCache.DefaultCredentials;
             // Get the response.
-            WebResponse response = request.GetResponse();
+            WebResponse response;
+            try
+            {
+                response = request.GetResponse();
+            }
+            catch
+            {
+                return string.Empty;
+            }
             // Get the stream containing content returned by the server.
             Stream dataStream = response.GetResponseStream();
             // Open the stream using a StreamReader for easy access.

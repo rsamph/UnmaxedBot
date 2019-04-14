@@ -25,6 +25,7 @@ namespace UnmaxedBot.Services
             };
 
             var response = RuneMethods.getRuneJSONResponse(HighscoreLiteUri + request.UserName);
+            if (response == null || response.Length <= 0) return result;
             
             int i = 0;
             var skillCount = Enum.GetValues(typeof(HighscoreSkillType)).Length;
