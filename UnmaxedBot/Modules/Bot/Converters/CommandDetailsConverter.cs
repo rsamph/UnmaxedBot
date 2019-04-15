@@ -1,6 +1,7 @@
 ﻿using Discord;
 using System.Text;
 using UnmaxedBot.Core;
+using UnmaxedBot.Core.Extensions;
 using UnmaxedBot.Modules.Bot.Entities;
 
 namespace UnmaxedBot.Modules.Bot.Converters
@@ -25,7 +26,7 @@ namespace UnmaxedBot.Modules.Bot.Converters
             return new EmbedBuilder()
                 .WithAuthor($"Command !{details.Command.Name}")
                 .WithDescription(description.ToString())
-                .WithThumbnailUrl("https://cdn.discordapp.com/icons/324278390955966464/671a5c63af6541f641c5938485364a38.png")
+                .WithUnmaxedLogo()
                 .WithColor(Color.DarkRed);
         }
     }
