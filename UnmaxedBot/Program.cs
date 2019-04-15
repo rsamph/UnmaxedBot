@@ -4,8 +4,9 @@ using Discord.WebSocket;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Threading.Tasks;
-using UnmaxedBot.Discord;
-using UnmaxedBot.Services;
+using UnmaxedBot.Core;
+using UnmaxedBot.Core.Services;
+using UnmaxedBot.Modules.Runescape.Services;
 
 namespace UnmaxedBot
 {
