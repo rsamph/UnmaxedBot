@@ -1,4 +1,6 @@
 ﻿using Discord.Commands;
+using System;
+using System.Linq;
 using System.Threading.Tasks;
 using UnmaxedBot.Core;
 using UnmaxedBot.Core.Services;
@@ -18,18 +20,31 @@ namespace UnmaxedBot.Modules.Bot
             _commandService = commandService;
         }
 
-        [Command("unmaxed"), Remarks("Retrieves a list of commands")]
-        public async Task Unmaxed()
+        [Command("unmaxed"), Remarks("Shows all available commands or the specified command's details")]
+        public async Task Unmaxed(string command = null)
         {
             await _logService.Log(Context.Message);
 
             await Context.Message.DeleteAsync();
 
-            // Todo: load all available commands (name/remarks/parameters) via the commandService
-            await ReplyAsync(new CommandList());
+            if (command == null)
+            {
+                await ReplyAsync(new CommandList(_commandService.Commands));
+            }
+            else
+            {
+                var actualCommand = _commandService.Commands
+                    .SingleOrDefault(c => c.Name.Equals(command, StringComparison.OrdinalIgnoreCase));
+                if (actualCommand != null)
+                {
+                    await ReplyAsync(new CommandDetails(actualCommand));
+                }
+
+                // Command not found: show error?
+            }
         }
 
-        [Command("spaghet"), Remarks("Retrieves the bot version and link to source")]
+        [Command("spaghet"), Remarks("Retrieves the bot version and link to the source code")]
         public async Task Spaghet()
         {
             await _logService.Log(Context.Message);

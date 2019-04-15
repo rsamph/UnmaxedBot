@@ -1,4 +1,5 @@
 ﻿using Discord;
+using System.Linq;
 using System.Text;
 using UnmaxedBot.Core;
 using UnmaxedBot.Modules.Bot.Entities;
@@ -10,15 +11,19 @@ namespace UnmaxedBot.Modules.Bot.Converters
         public object ConvertToMessage(CommandList commandList)
         {
             var description = new StringBuilder();
-            foreach (var command in commandList.Commands)
+
+            description.Append("```css\n");
+            description.Append($"!{commandList.HelperCommand.Name} {{command}} for command details");
+            description.Append(" ");
+            description.Append("```");
+            
+            description.Append("```css\n");
+            foreach (var command in commandList.Commands.Where(c => c != commandList.HelperCommand))
             {
-                description.Append("```css\n");
-                description.Append(command.Format);
-                description.Append(" : ");
-                description.Append(command.Description);
-                description.Append("\n");
-                description.Append("```");
+                description.Append($"!{command.Name}");
+                description.Append(" ");
             }
+            description.Append("```");
 
             var builder = new EmbedBuilder()
                 .WithAuthor("Available commands")

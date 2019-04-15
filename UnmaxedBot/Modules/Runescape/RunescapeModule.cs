@@ -22,7 +22,7 @@ namespace UnmaxedBot.Modules.Runescape
             _highscoreService = highscoreService;
         }
 
-        [Command("pc"), Remarks("Executes a price check for an item against the Runescape API")]
+        [Command("pc"), Remarks("Retrieves the current price of an item from the Runescape API")]
         public async Task PriceCheck([Remainder]string itemName)
         {
             await LogMessage();
