@@ -7,6 +7,8 @@ namespace UnmaxedBot.Core
 {
     public abstract class UnmaxedModule : ModuleBase<SocketCommandContext>
     {
+        protected string Version => GetType().Assembly.GetName().Version.ToString();
+
         protected LogService _logService;
 
         public UnmaxedModule(
@@ -22,12 +24,29 @@ namespace UnmaxedBot.Core
 
         protected async Task ReplyAsync(IEntity entity)
         {
-            // Todo: find a way to attach a footer to an embed (including username and bot version)
-            var message = entity.ToMessage();
-            if (message is Embed)
-                await Context.Channel.SendMessageAsync(embed: message as Embed);
+            var response = entity.ToResponse();
+            if (response is EmbedBuilder embedBuilder)
+            {
+                if (embedBuilder.Footer == null)
+                {
+                    embedBuilder
+                        .WithFooter(footer => footer.Text = $"UnmaxedBot v{Version} • Requested by {Context.Message.Author.Username}")
+                        .WithCurrentTimestamp();
+                }
+                if (!embedBuilder.Timestamp.HasValue)
+                {
+                    embedBuilder.WithCurrentTimestamp();
+                }
+                await Context.Channel.SendMessageAsync(embed: embedBuilder.Build() as Embed);
+            }
+            else if (response is Embed)
+            {
+                await Context.Channel.SendMessageAsync(embed: response as Embed);
+            }
             else
-                await Context.Channel.SendMessageAsync(text: message as string);
+            {
+                await Context.Channel.SendMessageAsync(text: response as string);
+            }
         }
     }
 }

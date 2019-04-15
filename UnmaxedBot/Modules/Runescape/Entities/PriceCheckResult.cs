@@ -13,9 +13,9 @@ namespace UnmaxedBot.Modules.Runescape.Entities
         public int? ExactPrice { get; set; }
         public int? Amount { get; set; }
 
-        public object ToMessage()
+        public object ToResponse()
         {
-            return new PriceCheckResultConverter().ConvertToMessage(this);
+            return new PriceCheckResultConverter().ConvertToResponse(this);
         }
     }
 }

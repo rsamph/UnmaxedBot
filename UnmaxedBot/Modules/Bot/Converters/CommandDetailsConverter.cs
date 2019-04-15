@@ -7,7 +7,7 @@ namespace UnmaxedBot.Modules.Bot.Converters
 {
     public class CommandDetailsConverter : IEntityConverter<CommandDetails>
     {
-        public object ConvertToMessage(CommandDetails details)
+        public object ConvertToResponse(CommandDetails details)
         {
             var description = new StringBuilder();
             description.Append(details.Command.Remarks);
@@ -22,14 +22,11 @@ namespace UnmaxedBot.Modules.Bot.Converters
             }
             description.Append("```");
 
-            var builder = new EmbedBuilder()
+            return new EmbedBuilder()
                 .WithAuthor($"Command !{details.Command.Name}")
                 .WithDescription(description.ToString())
                 .WithThumbnailUrl("https://cdn.discordapp.com/icons/324278390955966464/671a5c63af6541f641c5938485364a38.png")
-                .WithColor(Color.DarkRed)
-                .WithFooter(footer => footer.Text = $"UnmaxedBot v{details.Version}")
-                .WithCurrentTimestamp();
-            return builder.Build();
+                .WithColor(Color.DarkRed);
         }
     }
 }

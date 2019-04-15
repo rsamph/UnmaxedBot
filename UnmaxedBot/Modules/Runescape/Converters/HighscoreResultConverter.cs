@@ -10,7 +10,7 @@ namespace UnmaxedBot.Modules.Runescape.Converters
 {
     public class HighscoreResultConverter : IEntityConverter<HighscoreResult>
     {
-        public object ConvertToMessage(HighscoreResult highscore)
+        public object ConvertToResponse(HighscoreResult highscore)
         {
             if (!highscore.Found)
             {
@@ -33,7 +33,7 @@ namespace UnmaxedBot.Modules.Runescape.Converters
             return "I dunno wym :(";
         }
         
-        private Embed ToEmbed(HighscoreResult highscore, List<HighscoreActivityType> activities)
+        private EmbedBuilder ToEmbed(HighscoreResult highscore, List<HighscoreActivityType> activities)
         {
             var description = new StringBuilder();
             description.Append("```css\n");
@@ -48,14 +48,11 @@ namespace UnmaxedBot.Modules.Runescape.Converters
             }
             description.Append("```");
 
-            var builder = new EmbedBuilder()
-                .WithAuthor("Player: " + highscore.UserName)
+            return new EmbedBuilder()
+                .WithAuthor("Clues by " + highscore.UserName)
                 .WithDescription(description.ToString())
                 .WithColor(Color.DarkRed)
-                .WithThumbnailUrl("https://runescape.wiki/images/thumb/d/df/Clue_scroll_detail.png/100px-Clue_scroll_detail.png")
-                .WithFooter(footer => footer.Text = $"UnmaxedBot v{highscore.Version}")
-                .WithCurrentTimestamp();
-            return builder.Build();
+                .WithThumbnailUrl("https://runescape.wiki/images/thumb/d/df/Clue_scroll_detail.png/100px-Clue_scroll_detail.png");
         }
     }
 }

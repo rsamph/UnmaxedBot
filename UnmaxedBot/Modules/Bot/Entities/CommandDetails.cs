@@ -6,8 +6,6 @@ namespace UnmaxedBot.Modules.Bot.Entities
 {
     public class CommandDetails : IEntity
     {
-        public string Version => GetType().Assembly.GetName().Version.ToString();
-
         public CommandInfo Command { get; private set; }
 
         public CommandDetails(CommandInfo command)
@@ -15,9 +13,9 @@ namespace UnmaxedBot.Modules.Bot.Entities
             Command = command;
         }
 
-        public object ToMessage()
+        public object ToResponse()
         {
-            return new CommandDetailsConverter().ConvertToMessage(this);
+            return new CommandDetailsConverter().ConvertToResponse(this);
         }
     }
 }

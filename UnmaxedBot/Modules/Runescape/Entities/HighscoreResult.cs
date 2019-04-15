@@ -11,7 +11,6 @@ namespace UnmaxedBot.Modules.Runescape.Entities
         public HighScoreRequestType RequestType { get; set; }
         public List<HighscoreSkill> Skills { get; set; }
         public List<HighscoreActivity> Activities { get; set; }
-        public string Version => GetType().Assembly.GetName().Version.ToString();
         public bool Found => Skills.Any() || Activities.Any();
 
         public HighscoreResult()
@@ -20,9 +19,9 @@ namespace UnmaxedBot.Modules.Runescape.Entities
             Activities = new List<HighscoreActivity>();
         }
 
-        public object ToMessage()
+        public object ToResponse()
         {
-            return new HighscoreResultConverter().ConvertToMessage(this);
+            return new HighscoreResultConverter().ConvertToResponse(this);
         }
     }
 }

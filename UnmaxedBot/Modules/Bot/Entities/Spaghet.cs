@@ -6,11 +6,12 @@ namespace UnmaxedBot.Modules.Bot.Entities
     public class Spaghet : IEntity
     {
         public string Version => GetType().Assembly.GetName().Version.ToString();
+        public string RequestedBy { get; set; }
         public string GithubUrl => "https://github.com/rsamph/UnmaxedBot";
 
-        public object ToMessage()
+        public object ToResponse()
         {
-            return new SpaghetConverter().ConvertToMessage(this);
+            return new SpaghetConverter().ConvertToResponse(this);
         }
     }
 }

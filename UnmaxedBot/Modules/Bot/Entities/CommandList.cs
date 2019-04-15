@@ -8,8 +8,6 @@ namespace UnmaxedBot.Modules.Bot.Entities
 {
     public class CommandList : IEntity
     {
-        public string Version => GetType().Assembly.GetName().Version.ToString();
-
         public IEnumerable<CommandInfo> Commands { get; private set; }
 
         public CommandInfo HelperCommand => Commands.Single(c => c.Name == "unmaxed");
@@ -19,9 +17,9 @@ namespace UnmaxedBot.Modules.Bot.Entities
             Commands = commands;
         }
 
-        public object ToMessage()
+        public object ToResponse()
         {
-            return new CommandListConverter().ConvertToMessage(this);
+            return new CommandListConverter().ConvertToResponse(this);
         }
     }
 }

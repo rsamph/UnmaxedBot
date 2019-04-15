@@ -2,6 +2,6 @@
 {
     public interface IEntityConverter<T> where T : IEntity
     {
-        object ConvertToMessage(T entity);
+        object ConvertToResponse(T entity);
     }
 }

@@ -9,7 +9,7 @@ namespace UnmaxedBot.Modules.Runescape.Converters
 {
     public class PriceCheckResultConverter : IEntityConverter<PriceCheckResult>
     {
-        public object ConvertToMessage(PriceCheckResult priceCheck)
+        public object ConvertToResponse(PriceCheckResult priceCheck)
         {
             if (priceCheck.ExactMatch != null)
             {
@@ -22,7 +22,7 @@ namespace UnmaxedBot.Modules.Runescape.Converters
             return "What's this?";
         }
 
-        private Embed ToEmbed(Models.DetailResponse itemDetails, int? amount, int? exactPrice)
+        private EmbedBuilder ToEmbed(Models.DetailResponse itemDetails, int? amount, int? exactPrice)
         {
             var description = new StringBuilder();
             description.Append(itemDetails.item.description);
@@ -36,19 +36,17 @@ namespace UnmaxedBot.Modules.Runescape.Converters
                 description.Append($"\nPrice for {amount}: {totalPrice.AsShorthandPriceNotation()} gp");
             }
             description.Append("```");
-
+            
             var lastMonth = itemDetails.item.day30.change;
             var lastQuarter = itemDetails.item.day90.change;
             var lastSixMonths = itemDetails.item.day180.change;
+            description.Append($"Trend: month {lastMonth} | quarter {lastQuarter} | six months {lastSixMonths}");
 
-            var builder = new EmbedBuilder()
+            return new EmbedBuilder()
                 .WithAuthor(itemDetails.item.name)
                 .WithDescription(description.ToString())
                 .WithThumbnailUrl(itemDetails.item.icon)
-                .WithColor(Color.DarkRed)
-                .WithFooter(footer => footer.Text = $"Trend: month {lastMonth} | quarter {lastQuarter} | six months {lastSixMonths}")
-                .WithCurrentTimestamp();
-            return builder.Build();
+                .WithColor(Color.DarkRed);
         }
     }
 }

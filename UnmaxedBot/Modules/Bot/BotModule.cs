@@ -51,7 +51,7 @@ namespace UnmaxedBot.Modules.Bot
 
             await Context.Message.DeleteAsync();
             
-            await ReplyAsync(new Spaghet());
+            await ReplyAsync(new Spaghet { RequestedBy = Context.Message.Author.Username });
         }
     }
 }

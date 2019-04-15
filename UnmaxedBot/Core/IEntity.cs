@@ -2,6 +2,6 @@
 {
     public interface IEntity
     {
-        object ToMessage();
+        object ToResponse();
     }
 }
