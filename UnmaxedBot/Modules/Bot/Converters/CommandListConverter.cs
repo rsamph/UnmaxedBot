@@ -28,9 +28,7 @@ namespace UnmaxedBot.Modules.Bot.Converters
 
             return new EmbedBuilder()
                 .WithAuthor("Available commands")
-                .WithDescription(description.ToString())
-                .WithUnmaxedLogo()
-                .WithColor(Color.DarkRed);
+                .WithDescription(description.ToString());
         }
     }
 }

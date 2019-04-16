@@ -51,7 +51,6 @@ namespace UnmaxedBot.Modules.Runescape.Converters
             return new EmbedBuilder()
                 .WithAuthor("Clues by " + highscore.UserName)
                 .WithDescription(description.ToString())
-                .WithColor(Color.DarkRed)
                 .WithThumbnailUrl("https://runescape.wiki/images/thumb/d/df/Clue_scroll_detail.png/100px-Clue_scroll_detail.png");
         }
     }

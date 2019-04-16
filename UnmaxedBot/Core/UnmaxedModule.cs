@@ -1,6 +1,7 @@
 ﻿using Discord;
 using Discord.Commands;
 using System.Threading.Tasks;
+using UnmaxedBot.Core.Extensions;
 using UnmaxedBot.Core.Services;
 
 namespace UnmaxedBot.Core
@@ -27,16 +28,7 @@ namespace UnmaxedBot.Core
             var response = entity.ToResponse();
             if (response is EmbedBuilder embedBuilder)
             {
-                if (embedBuilder.Footer == null)
-                {
-                    embedBuilder
-                        .WithFooter(footer => footer.Text = $"UnmaxedBot v{Version} • Requested by {Context.Message.Author.Username}")
-                        .WithCurrentTimestamp();
-                }
-                if (!embedBuilder.Timestamp.HasValue)
-                {
-                    embedBuilder.WithCurrentTimestamp();
-                }
+                ApplyStandardFormat(embedBuilder);
                 await Context.Channel.SendMessageAsync(embed: embedBuilder.Build() as Embed);
             }
             else if (response is Embed)
@@ -47,6 +39,18 @@ namespace UnmaxedBot.Core
             {
                 await Context.Channel.SendMessageAsync(text: response as string);
             }
+        }
+
+        private void ApplyStandardFormat(EmbedBuilder embedBuilder)
+        {
+            if (embedBuilder.Footer == null)
+                embedBuilder.WithFooter(footer => footer.Text = $"UnmaxedBot v{Version} • Requested by {Context.Message.Author.Username}");
+            if (!embedBuilder.Timestamp.HasValue)
+                embedBuilder.WithCurrentTimestamp();
+            if (embedBuilder.Color == null)
+                embedBuilder.WithColor(Color.DarkRed);
+            if (embedBuilder.ThumbnailUrl == null)
+                embedBuilder.WithUnmaxedLogo();
         }
     }
 }

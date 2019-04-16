@@ -1,7 +1,6 @@
 ﻿using Discord;
 using System.Text;
 using UnmaxedBot.Core;
-using UnmaxedBot.Core.Extensions;
 using UnmaxedBot.Modules.Bot.Entities;
 
 namespace UnmaxedBot.Modules.Bot.Converters
@@ -25,9 +24,7 @@ namespace UnmaxedBot.Modules.Bot.Converters
 
             return new EmbedBuilder()
                 .WithAuthor($"Command !{details.Command.Name}")
-                .WithDescription(description.ToString())
-                .WithUnmaxedLogo()
-                .WithColor(Color.DarkRed);
+                .WithDescription(description.ToString());
         }
     }
 }

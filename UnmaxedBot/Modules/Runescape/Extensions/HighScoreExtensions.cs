@@ -9,8 +9,8 @@
 
         public static string AsReadableRank(this int rank)
         {
-            if (rank < 1)
-                return "Not ranked";
+            if (rank <= 0)
+                return "not ranked";
             if (rank <= 1000)
                 return $"rank {rank}";
             if (rank <= 10000)

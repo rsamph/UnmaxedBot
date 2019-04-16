@@ -40,13 +40,14 @@ namespace UnmaxedBot.Modules.Runescape.Converters
             var lastMonth = itemDetails.item.day30.change;
             var lastQuarter = itemDetails.item.day90.change;
             var lastSixMonths = itemDetails.item.day180.change;
+            description.Append("```css\n");
             description.Append($"Trend: month {lastMonth} | quarter {lastQuarter} | six months {lastSixMonths}");
+            description.Append("```");
 
             return new EmbedBuilder()
                 .WithAuthor(itemDetails.item.name)
                 .WithDescription(description.ToString())
-                .WithThumbnailUrl(itemDetails.item.icon)
-                .WithColor(Color.DarkRed);
+                .WithThumbnailUrl(itemDetails.item.icon);
         }
     }
 }

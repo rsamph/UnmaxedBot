@@ -74,15 +74,8 @@ namespace UnmaxedBot.Modules.Runescape.Services
                 return result;
             }
 
-            item = FindInCache((i) => i.Name.StartsWith(request.ItemName, StringComparison.OrdinalIgnoreCase));
-            if (item != null)
-            {
-                result.CloseMatch = RuneMethods.getDetail(item.Id);
-                if (request.Amount.HasValue) result.ExactPrice = RetrieveExactPrice(item);
-                return result;
-            }
-
-            item = FindInCache((i) => i.Name.Contains(request.ItemName, StringComparison.OrdinalIgnoreCase));
+            item = FindInCache((i) => i.Name.StartsWith(request.ItemName, StringComparison.OrdinalIgnoreCase) ||
+                                      i.Name.Contains(request.ItemName, StringComparison.OrdinalIgnoreCase));
             if (item != null)
             {
                 result.CloseMatch = RuneMethods.getDetail(item.Id);
