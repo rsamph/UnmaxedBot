@@ -33,7 +33,7 @@ namespace UnmaxedBot.Modules.Runescape.Converters
             if (amount.HasValue && exactPrice.HasValue)
             {
                 double totalPrice = (double)amount.Value * exactPrice.Value;
-                description.Append($"\nPrice for {amount}: {totalPrice.AsShorthandPriceNotation()} gp");
+                description.Append($"\nPrice for {amount}: {totalPrice.AsShorthandValue()} gp");
             }
             description.Append("```");
             

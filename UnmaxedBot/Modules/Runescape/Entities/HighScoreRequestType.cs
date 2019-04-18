@@ -1,14 +1,10 @@
 ﻿namespace UnmaxedBot.Modules.Runescape.Entities
 {
-    public class HighScoreRequestType
+    public enum HighScoreRequestType
     {
-        public static HighScoreRequestType Clues = new HighScoreRequestType("Clues");
-
-        private string _typeIdentifier;
-
-        private HighScoreRequestType(string typeIdentifier)
-        {
-            _typeIdentifier = typeIdentifier;
-        }
+        Clues,
+        BarbarianAssault,
+        TopActivities,
+        TopSkills
     }
 }

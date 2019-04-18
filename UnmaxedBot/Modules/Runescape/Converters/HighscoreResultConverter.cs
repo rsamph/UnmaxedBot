@@ -1,57 +1,37 @@
-﻿using Discord;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using UnmaxedBot.Core;
 using UnmaxedBot.Modules.Runescape.Entities;
-using UnmaxedBot.Modules.Runescape.Extensions;
 
 namespace UnmaxedBot.Modules.Runescape.Converters
 {
     public class HighscoreResultConverter : IEntityConverter<HighscoreResult>
     {
+        private readonly IDictionary<HighScoreRequestType, IEntityConverter<HighscoreResult>> _specificConverters;
+
+        public HighscoreResultConverter()
+        {
+            _specificConverters = new Dictionary<HighScoreRequestType, IEntityConverter<HighscoreResult>>
+            {
+                { HighScoreRequestType.Clues, new ClueResultConverter() },
+                { HighScoreRequestType.BarbarianAssault, new BarbarianAssaultResultConverter() },
+                { HighScoreRequestType.TopActivities, new TopActivitiesResultConverter() },
+                { HighScoreRequestType.TopSkills, new TopSkillsResultConverter() }
+            };
+        }
+
         public object ConvertToResponse(HighscoreResult highscore)
         {
             if (!highscore.Found)
             {
-                return $"Sorry I could not find any highscores for player {highscore.UserName}";
+                return $"Sorry I could not find any highscores for player {highscore.PlayerName}";
             }
 
-            if (highscore.RequestType == HighScoreRequestType.Clues)
+            if (_specificConverters.ContainsKey(highscore.RequestType))
             {
-                var activities = new List<HighscoreActivityType>
-                {
-                    HighscoreActivityType.ClueScrollsEasy,
-                    HighscoreActivityType.ClueScrollsMedium,
-                    HighscoreActivityType.ClueScrollsHard,
-                    HighscoreActivityType.ClueScrollsElite,
-                    HighscoreActivityType.ClueScrollsMaster
-                };
-                return ToEmbed(highscore, activities);
+                return _specificConverters[highscore.RequestType].ConvertToResponse(highscore);
             }
 
             return "I dunno wym :(";
-        }
-        
-        private EmbedBuilder ToEmbed(HighscoreResult highscore, List<HighscoreActivityType> activities)
-        {
-            var description = new StringBuilder();
-            description.Append("```css\n");
-            foreach (var activity in activities)
-            {
-                var activityHighscore = highscore.Activities.Single(a => a.ActivityType == activity);
-                description.Append(activity.ToString().Replace("ClueScrolls", ""));
-                description.Append(" : ");
-                description.Append(activityHighscore.Score.AsReadableScore());
-                description.Append($" ({activityHighscore.Rank.AsReadableRank()}) ");
-                description.Append("\n");
-            }
-            description.Append("```");
-
-            return new EmbedBuilder()
-                .WithAuthor("Clues by " + highscore.UserName)
-                .WithDescription(description.ToString())
-                .WithThumbnailUrl("https://runescape.wiki/images/thumb/d/df/Clue_scroll_detail.png/100px-Clue_scroll_detail.png");
         }
     }
 }

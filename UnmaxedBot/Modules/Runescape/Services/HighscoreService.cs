@@ -19,11 +19,11 @@ namespace UnmaxedBot.Modules.Runescape.Services
         {
             var result = new HighscoreResult
             {
-                UserName = request.UserName,
+                PlayerName = request.PlayerName,
                 RequestType = request.RequestType
             };
 
-            var response = RuneMethods.getRuneJSONResponse(HighscoreLiteUri + request.UserName);
+            var response = RuneMethods.getRuneJSONResponse(HighscoreLiteUri + request.PlayerName);
             if (response == null || response.Length <= 0) return result;
             
             int i = 0;

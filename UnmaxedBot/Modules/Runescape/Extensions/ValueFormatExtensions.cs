@@ -3,13 +3,13 @@ using System.Globalization;
 
 namespace UnmaxedBot.Modules.Runescape.Extensions
 {
-    public static class PriceFormatExtensions
+    public static class ValueFormatExtensions
     {
         private static readonly double aBillion = Math.Pow(10, 9);
         private static readonly double aMillion = Math.Pow(10, 6);
         private static readonly double aThousand = Math.Pow(10, 3);
 
-        public static string AsShorthandPriceNotation(this double value)
+        public static string AsShorthandValue(this double value)
         {
             if (value > aBillion)
                 return value.ToString("0,,,.###b", CultureInfo.InvariantCulture);

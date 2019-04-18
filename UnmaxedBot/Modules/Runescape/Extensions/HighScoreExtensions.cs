@@ -1,4 +1,7 @@
-﻿namespace UnmaxedBot.Modules.Runescape.Extensions
+﻿using System.Text.RegularExpressions;
+using UnmaxedBot.Modules.Runescape.Entities;
+
+namespace UnmaxedBot.Modules.Runescape.Extensions
 {
     public static class HighScoreExtensions
     {
@@ -20,6 +23,21 @@
             if (rank <= 100000)
                 return $"top 100k";
             return "top 1m";
+        }
+
+        public static string AsShorthandName(this HighscoreActivityType activity)
+        {
+            var activityName = activity.ToString();
+            if (activityName.StartsWith("ClueScrolls"))
+                return activityName.Replace("ClueScrolls", "");
+            if (activityName.StartsWith("Ba"))
+                return activityName.Replace("Ba", "");
+            return activityName;
+        }
+
+        public static string AsHumanReadableName(this HighscoreActivityType activity)
+        {
+            return string.Join(' ' , Regex.Split(activity.ToString(), @"(?<!^)(?=[A-Z])"));
         }
     }
 }

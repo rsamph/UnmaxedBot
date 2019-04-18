@@ -7,7 +7,7 @@ namespace UnmaxedBot.Modules.Runescape.Entities
 {
     public class HighscoreResult : IEntity
     {
-        public string UserName { get; set; }
+        public string PlayerName { get; set; }
         public HighScoreRequestType RequestType { get; set; }
         public List<HighscoreSkill> Skills { get; set; }
         public List<HighscoreActivity> Activities { get; set; }
