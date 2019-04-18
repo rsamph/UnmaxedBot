@@ -38,56 +38,28 @@ namespace UnmaxedBot.Modules.Runescape
         [Command("clues"), Remarks("Retrieves a player's clue activities")]
         public async Task Clues(string playerName = "")
         {
-            await LogMessage();
-
-            await Context.Message.DeleteAsync();
-            
-            var request = new HighScoreRequest
-            {
-                PlayerName = playerName.Length > 0 ? playerName : Context.Message.Author.Username,
-                RequestType = HighScoreRequestType.Clues
-            };
-            var highscoreResult = await _highscoreService.GetHighscoreAsync(request);
-
-            await ReplyAsync(highscoreResult);
+            await Highscore(HighScoreRequestType.Clues, playerName);
         }
 
         [Command("ba"), Remarks("Retrieves a player's barbarian assault score")]
         public async Task BarbarianAssault(string playerName = "")
         {
-            await LogMessage();
-
-            await Context.Message.DeleteAsync();
-
-            var request = new HighScoreRequest
-            {
-                PlayerName = playerName.Length > 0 ? playerName : Context.Message.Author.Username,
-                RequestType = HighScoreRequestType.BarbarianAssault
-            };
-            var highscoreResult = await _highscoreService.GetHighscoreAsync(request);
-
-            await ReplyAsync(highscoreResult);
+            await Highscore(HighScoreRequestType.BarbarianAssault, playerName);
         }
 
         [Command("act"), Remarks("Retrieves a player's top activities")]
         public async Task TopActivities(string playerName = "")
         {
-            await LogMessage();
-
-            await Context.Message.DeleteAsync();
-
-            var request = new HighScoreRequest
-            {
-                PlayerName = playerName.Length > 0 ? playerName : Context.Message.Author.Username,
-                RequestType = HighScoreRequestType.TopActivities
-            };
-            var highscoreResult = await _highscoreService.GetHighscoreAsync(request);
-
-            await ReplyAsync(highscoreResult);
+            await Highscore(HighScoreRequestType.TopActivities, playerName);
         }
 
         [Command("skills"), Remarks("Retrieves a player's top skills")]
         public async Task TopSkills(string playerName = "")
+        {
+            await Highscore(HighScoreRequestType.TopSkills, playerName);
+        }
+
+        private async Task Highscore(HighScoreRequestType requestType, string playerName = "")
         {
             await LogMessage();
 
@@ -96,7 +68,7 @@ namespace UnmaxedBot.Modules.Runescape
             var request = new HighScoreRequest
             {
                 PlayerName = playerName.Length > 0 ? playerName : Context.Message.Author.Username,
-                RequestType = HighScoreRequestType.TopSkills
+                RequestType = requestType
             };
             var highscoreResult = await _highscoreService.GetHighscoreAsync(request);
 
