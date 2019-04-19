@@ -1,4 +1,4 @@
-﻿namespace UnmaxedBot.Modules.Runescape.Entities
+﻿namespace UnmaxedBot.Modules.Runescape.Api.HighscoreLite.Model
 {
     public class HighscoreSkill
     {

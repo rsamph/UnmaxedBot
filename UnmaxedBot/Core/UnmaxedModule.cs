@@ -1,5 +1,6 @@
 ﻿using Discord;
 using Discord.Commands;
+using System;
 using System.Threading.Tasks;
 using UnmaxedBot.Core.Extensions;
 using UnmaxedBot.Core.Services;
@@ -21,6 +22,18 @@ namespace UnmaxedBot.Core
         protected async Task LogMessage()
         { 
             await _logService.Log(Context.Message);
+        }
+
+        protected async Task LogError(Exception exception)
+        {
+            var source = GetType().Name.Replace("Module", "");
+            await _logService.Log(exception, source);
+        }
+
+        protected async Task HandleErrorAsync(string userMessage, Exception exception)
+        {
+            await LogError(exception);
+            await Context.Channel.SendMessageAsync(text: userMessage);
         }
 
         protected async Task ReplyAsync(IEntity entity)

@@ -1,4 +1,5 @@
 ﻿using Discord.Commands;
+using System;
 using System.Threading.Tasks;
 using UnmaxedBot.Core;
 using UnmaxedBot.Core.Services;
@@ -29,10 +30,17 @@ namespace UnmaxedBot.Modules.Runescape
 
             await Context.Message.DeleteAsync();
 
-            var request = new PriceCheckRequest(itemName);
-            var priceCheckResult = await _grandExchangeService.PriceCheckAsync(request);
-
-            await ReplyAsync(priceCheckResult);
+            try
+            {
+                var request = new PriceCheckRequest(itemName);
+                var priceCheckResult = await _grandExchangeService.PriceCheckAsync(request);
+                await ReplyAsync(priceCheckResult);
+            }
+            catch (Exception ex)
+            {
+                var userMessage = $"Sorry {Context.Message.Author.Username}, I could not find the price of item {itemName}";
+                await HandleErrorAsync(userMessage, ex);
+            }
         }
 
         [Command("clues"), Remarks("Retrieves a player's clue activities")]
@@ -65,14 +73,18 @@ namespace UnmaxedBot.Modules.Runescape
 
             await Context.Message.DeleteAsync();
 
-            var request = new HighScoreRequest
+            var player = playerName.Length > 0 ? playerName : Context.Message.Author.Username;
+            try
             {
-                PlayerName = playerName.Length > 0 ? playerName : Context.Message.Author.Username,
-                RequestType = requestType
-            };
-            var highscoreResult = await _highscoreService.GetHighscoreAsync(request);
-
-            await ReplyAsync(highscoreResult);
+                var highscoreResult = await _highscoreService.GetHighscoreAsync(player);
+                highscoreResult.RequestType = requestType;
+                await ReplyAsync(highscoreResult);
+            }
+            catch (Exception ex)
+            {
+                var userMessage = $"Sorry {Context.Message.Author.Username}, I did not find any highscores for player {player}";
+                await HandleErrorAsync(userMessage, ex);
+            }
         }
     }
 }

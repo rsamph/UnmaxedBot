@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using UnmaxedBot.Core;
+using UnmaxedBot.Modules.Runescape.Api.HighscoreLite.Model;
 using UnmaxedBot.Modules.Runescape.Entities;
 using UnmaxedBot.Modules.Runescape.Extensions;
 
@@ -12,7 +13,7 @@ namespace UnmaxedBot.Modules.Runescape.Converters
     {
         public object ConvertToResponse(HighscoreResult highscore)
         {
-            var topActivities = highscore.Activities
+            var topActivities = highscore.Highscores.Activities
                 .Where(a => a.Rank > 0)
                 .OrderBy(a => a.Rank)
                 .Take(6);

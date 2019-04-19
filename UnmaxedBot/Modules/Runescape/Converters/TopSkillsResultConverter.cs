@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using UnmaxedBot.Core;
+using UnmaxedBot.Modules.Runescape.Api.HighscoreLite.Model;
 using UnmaxedBot.Modules.Runescape.Entities;
 using UnmaxedBot.Modules.Runescape.Extensions;
 
@@ -12,7 +13,7 @@ namespace UnmaxedBot.Modules.Runescape.Converters
     {
         public object ConvertToResponse(HighscoreResult highscore)
         {
-            var topSkills = highscore.Skills
+            var topSkills = highscore.Highscores.Skills
                 .Where(s => s.SkillType != HighscoreSkillType.Overall)
                 .Where(s => s.Experience > 0)
                 .OrderByDescending(s => s.Experience)

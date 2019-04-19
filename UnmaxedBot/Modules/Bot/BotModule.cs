@@ -40,7 +40,8 @@ namespace UnmaxedBot.Modules.Bot
                     await ReplyAsync(new CommandDetails(actualCommand));
                 }
 
-                // Command not found: show error?
+                var userMessage = $"Sorry {Context.Message.Author.Username}, I don't know the command '{command}'";
+                await ReplyAsync(userMessage);
             }
         }
 

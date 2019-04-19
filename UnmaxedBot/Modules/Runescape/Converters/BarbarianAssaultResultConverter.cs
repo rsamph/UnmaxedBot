@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using UnmaxedBot.Core;
+using UnmaxedBot.Modules.Runescape.Api.HighscoreLite.Model;
 using UnmaxedBot.Modules.Runescape.Entities;
 using UnmaxedBot.Modules.Runescape.Extensions;
 
@@ -28,7 +29,7 @@ namespace UnmaxedBot.Modules.Runescape.Converters
             description.Append("```css\n");
             foreach (var activity in activities)
             {
-                var activityHighscore = highscore.Activities.Single(a => a.ActivityType == activity);
+                var activityHighscore = highscore.Highscores.Activities.Single(a => a.ActivityType == activity);
                 description.Append(activity.ToString().Replace("Ba", ""));
                 description.Append(" : ");
                 description.Append(activityHighscore.Score.AsReadableScore());

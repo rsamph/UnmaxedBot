@@ -1,6 +1,5 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using UnmaxedBot.Core;
+﻿using UnmaxedBot.Core;
+using UnmaxedBot.Modules.Runescape.Api.HighscoreLite.Model;
 using UnmaxedBot.Modules.Runescape.Converters;
 
 namespace UnmaxedBot.Modules.Runescape.Entities
@@ -9,15 +8,7 @@ namespace UnmaxedBot.Modules.Runescape.Entities
     {
         public string PlayerName { get; set; }
         public HighScoreRequestType RequestType { get; set; }
-        public List<HighscoreSkill> Skills { get; set; }
-        public List<HighscoreActivity> Activities { get; set; }
-        public bool Found => Skills.Any() || Activities.Any();
-
-        public HighscoreResult()
-        {
-            Skills = new List<HighscoreSkill>();
-            Activities = new List<HighscoreActivity>();
-        }
+        public Highscores Highscores { get; set; }
 
         public object ToResponse()
         {

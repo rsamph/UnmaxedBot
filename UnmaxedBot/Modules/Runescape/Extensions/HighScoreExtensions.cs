@@ -1,5 +1,5 @@
 ﻿using System.Text.RegularExpressions;
-using UnmaxedBot.Modules.Runescape.Entities;
+using UnmaxedBot.Modules.Runescape.Api.HighscoreLite.Model;
 
 namespace UnmaxedBot.Modules.Runescape.Extensions
 {

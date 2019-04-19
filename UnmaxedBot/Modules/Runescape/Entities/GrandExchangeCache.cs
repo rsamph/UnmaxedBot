@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnmaxedBot.Core.Data;
-using UnmaxedBot.Modules.Runescape.Runesharp;
+using UnmaxedBot.Modules.Runescape.Api.ItemDb.Model;
 
 namespace UnmaxedBot.Modules.Runescape.Entities
 {
@@ -15,8 +15,8 @@ namespace UnmaxedBot.Modules.Runescape.Entities
         public static GrandExchangeCache CreateFromObjectStore(IObjectStore objectStore)
         {
             var categoryNames = Enum
-                .GetValues(typeof(Models.ItemCategory))
-                .Cast<Models.ItemCategory>();
+                .GetValues(typeof(ItemCategory))
+                .Cast<ItemCategory>();
 
             var categories = new List<GrandExchangeCategory>();
             foreach (var categoryName in categoryNames)

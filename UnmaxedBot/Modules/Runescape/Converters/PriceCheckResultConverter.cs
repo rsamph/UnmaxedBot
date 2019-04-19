@@ -1,9 +1,10 @@
 ﻿using Discord;
+using System;
 using System.Text;
 using UnmaxedBot.Core;
+using UnmaxedBot.Modules.Runescape.Api.ItemDb.Model;
 using UnmaxedBot.Modules.Runescape.Entities;
 using UnmaxedBot.Modules.Runescape.Extensions;
-using UnmaxedBot.Modules.Runescape.Runesharp;
 
 namespace UnmaxedBot.Modules.Runescape.Converters
 {
@@ -19,10 +20,10 @@ namespace UnmaxedBot.Modules.Runescape.Converters
             {
                 return ToEmbed(priceCheck.CloseMatch, priceCheck.Amount, priceCheck.ExactPrice);
             }
-            return "What's this?";
+            throw new Exception($"PriceCheckResult for {priceCheck.CachedItem.Name} does not have any matches!");
         }
 
-        private EmbedBuilder ToEmbed(Models.DetailResponse itemDetails, int? amount, int? exactPrice)
+        private EmbedBuilder ToEmbed(DetailResponse itemDetails, int? amount, int? exactPrice)
         {
             var description = new StringBuilder();
             description.Append(itemDetails.item.description);
