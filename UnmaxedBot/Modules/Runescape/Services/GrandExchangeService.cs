@@ -1,9 +1,7 @@
-﻿using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.IO;
+﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
+using UnmaxedBot.Core.Data;
 using UnmaxedBot.Modules.Runescape.Entities;
 using UnmaxedBot.Modules.Runescape.Runesharp;
 
@@ -11,49 +9,11 @@ namespace UnmaxedBot.Modules.Runescape.Services
 {
     public class GrandExchangeService
     {
-        private IList<Category> _itemCache;
+        private readonly GrandExchangeCache _cache;
 
-        public class Category
+        public GrandExchangeService(IObjectStore objectStore)
         {
-            public int Id { get; set; }
-            public string Name { get; set; }
-            public int TotalItems { get; set; }
-            public int TotalProcessed => Items.Count;
-            public List<Item> Items { get; set; }
-        }
-
-        public class Item
-        {
-            public int Id { get; set; }
-            public string Name { get; set; }
-            public string Description { get; set; }
-        }
-
-        public GrandExchangeService()
-        {
-            InitializeCache();
-        }
-
-        private void InitializeCache()
-        {
-            _itemCache = new List<Category>();
-
-            var categories = Enum
-                .GetValues(typeof(Models.ItemCategory))
-                .Cast<Models.ItemCategory>();
-
-            foreach (var category in categories)
-            {
-                var categoryFile = $@"Data\RsItems\ge-category-{category}.json";
-                if (!File.Exists(categoryFile)) continue;
-
-                using (StreamReader file = File.OpenText(categoryFile))
-                {
-                    JsonSerializer serializer = new JsonSerializer();
-                    var categoryItems = (Category)serializer.Deserialize(file, typeof(Category));
-                    _itemCache.Add(categoryItems);
-                }
-            }
+            _cache = GrandExchangeCache.CreateFromObjectStore(objectStore);
         }
 
         public async Task<PriceCheckResult> PriceCheckAsync(PriceCheckRequest request)
@@ -66,7 +26,7 @@ namespace UnmaxedBot.Modules.Runescape.Services
         {
             var result = new PriceCheckResult() { Amount = request.Amount };
 
-            var item = FindInCache((i) => i.Name.Equals(request.ItemName, StringComparison.OrdinalIgnoreCase));
+            var item = _cache.Find((i) => i.Name.Equals(request.ItemName, StringComparison.OrdinalIgnoreCase));
             if (item != null)
             {
                 result.ExactMatch = RuneMethods.getDetail(item.Id);
@@ -74,7 +34,7 @@ namespace UnmaxedBot.Modules.Runescape.Services
                 return result;
             }
 
-            item = FindInCache((i) => i.Name.StartsWith(request.ItemName, StringComparison.OrdinalIgnoreCase));
+            item = _cache.Find((i) => i.Name.StartsWith(request.ItemName, StringComparison.OrdinalIgnoreCase));
             if (item != null)
             {
                 result.CloseMatch = RuneMethods.getDetail(item.Id);
@@ -82,7 +42,7 @@ namespace UnmaxedBot.Modules.Runescape.Services
                 return result;
             }
 
-            item = FindInCache((i) => i.Name.Contains(request.ItemName, StringComparison.OrdinalIgnoreCase));
+            item = _cache.Find((i) => i.Name.Contains(request.ItemName, StringComparison.OrdinalIgnoreCase));
             if (item != null)
             {
                 result.CloseMatch = RuneMethods.getDetail(item.Id);
@@ -93,20 +53,7 @@ namespace UnmaxedBot.Modules.Runescape.Services
             return result;
         }
 
-        private Item FindInCache(Func<Item, bool> compare)
-        {
-            foreach (var category in _itemCache)
-            {
-                foreach (var item in category.Items)
-                {
-                    if (compare(item))
-                        return item;
-                }
-            }
-            return null;
-        }
-
-        private int? RetrieveExactPrice(Item item)
+        private int? RetrieveExactPrice(GrandExchangeItem item)
         {
             var graph = RuneMethods.getGraph(item.Id);
             if (graph == null) return null;

@@ -5,6 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Threading.Tasks;
 using UnmaxedBot.Core;
+using UnmaxedBot.Core.Data;
 using UnmaxedBot.Core.Services;
 using UnmaxedBot.Modules.Runescape.Services;
 
@@ -42,6 +43,7 @@ namespace UnmaxedBot
         private static void RegisterServices(IServiceCollection serviceCollection)
         {
             serviceCollection.AddSingleton<LogService>();
+            serviceCollection.AddSingleton<IObjectStore, JsonFileStore>();
             serviceCollection.AddSingleton<GrandExchangeService>();
             serviceCollection.AddSingleton<HighscoreService>();
             serviceCollection.AddSingleton<DiscordSocketClient>();
