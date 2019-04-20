@@ -48,6 +48,16 @@ namespace UnmaxedBot.Modules.Runescape.Services
                 return result;
             }
 
+            // See if all words match (indifferent order)
+            var words = request.ItemName.Split(' ').Select(i => i.Trim()).ToList();
+            item = _cache.Find((i) => i.Name.Split(' ').Intersect(words, StringComparer.OrdinalIgnoreCase).Count() == words.Count);
+            if (item != null)
+            {
+                result.CloseMatch = await _itemDb.GetItemDetailAsync(item.Id);
+                if (request.Amount.HasValue) result.ExactPrice = await RetrieveExactPrice(item);
+                return result;
+            }
+
             throw new Exception($"Item {request.ItemName} not found in cache");
         }
 
