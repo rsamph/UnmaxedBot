@@ -2,11 +2,13 @@
 
 namespace UnmaxedBot.Modules.Runescape.Api.ItemDb.Model
 {
-    public partial class GraphResponse
+    public class GraphPointList
     {
-        public class GraphPointList
+        public List<GraphPoint> GraphPoints { get; set; }
+
+        public GraphPointList()
         {
-            public List<GraphPoint> GraphPoints { get; set; }
+            GraphPoints = new List<GraphPoint>();
         }
     }
 }

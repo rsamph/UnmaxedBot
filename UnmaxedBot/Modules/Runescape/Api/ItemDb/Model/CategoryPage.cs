@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace UnmaxedBot.Modules.Runescape.Api.ItemDb.Model
 {
-    public partial class CataloguePage
+    public class CataloguePage
     {
         [JsonProperty("total")]
         public int Total { get; set; }

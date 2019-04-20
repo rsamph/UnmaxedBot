@@ -1,24 +1,20 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnmaxedBot.Core.Http;
-using UnmaxedBot.Core.Services;
 using UnmaxedBot.Modules.Runescape.Api.ItemDb.Model;
 
 namespace UnmaxedBot.Modules.Runescape.Api.ItemDb
 {
     public class ItemDbApi
     {
-        private readonly LogService _logService;
         private readonly WebServiceClient _client;
 
         protected ItemDbUriBuilder UriBuilder => new ItemDbUriBuilder();
 
-        public ItemDbApi(LogService logService)
+        public ItemDbApi()
         {
-            _logService = logService;
             _client = new WebServiceClient(tryCount: 3);
         }
 
@@ -27,99 +23,60 @@ namespace UnmaxedBot.Modules.Runescape.Api.ItemDb
             var categoryId = (int)category;
             var uri = UriBuilder.Catalogue().Alphabet(categoryId).Build();
 
-            try
-            {
-                var response = await _client.SendWebRequestAsync(uri);
-                return JsonConvert.DeserializeObject<CatalogueResponse>(response);
-            }
-            catch (Exception ex)
-            {
-                await _logService.Log(ex, nameof(ItemDbApi));
-                return null;
-            }
+            var response = await _client.SendWebRequestAsync(uri);
+            return JsonConvert.DeserializeObject<CatalogueResponse>(response);
+
         }
 
         public async Task<CataloguePage> GetCategoryPage(ItemCategory category, char letter, int pageNumber)
         {
             var categoryId = (int)category;
             var uri = UriBuilder.Catalogue().Page(categoryId, letter, pageNumber).Build();
-
-            try
-            {
-                var response = await _client.SendWebRequestAsync(uri);
-                return JsonConvert.DeserializeObject<CataloguePage>(response);
-            }
-            catch (Exception ex)
-            {
-                await _logService.Log(ex, nameof(ItemDbApi));
-                return null;
-            }
+            
+            var response = await _client.SendWebRequestAsync(uri);
+            return JsonConvert.DeserializeObject<CataloguePage>(response);
         }
 
         public async Task<ItemDetail> GetItemDetailAsync(int itemId)
         {
             var uri = UriBuilder.Catalogue().ItemDetail(itemId).Build();
 
-            try
-            {
-                var response = await _client.SendWebRequestAsync(uri);
-                var itemResponse = JsonConvert.DeserializeObject<ItemDetailResponse>(response);
-                return itemResponse.Item;
-            }
-            catch (Exception ex)
-            {
-                await _logService.Log(ex, nameof(ItemDbApi));
-                return null;
-            }
+            var response = await _client.SendWebRequestAsync(uri);
+            var itemResponse = JsonConvert.DeserializeObject<ItemDetailResponse>(response);
+            return itemResponse.Item;
         }
 
         public async Task<GraphResponse> GetItemGraphAsync(int itemId)
         {
             var uri = UriBuilder.Graph().ItemGraph(itemId).Build();
             
-            try
-            {
-                var response = await _client.SendWebRequestAsync(uri);
-                var jObject = JObject.Parse(response);
-                return ConstructGraphResponse(jObject);
-            }
-            catch (Exception ex)
-            {
-                await _logService.Log(ex, nameof(ItemDbApi));
-                return null;
-            }
+            var response = await _client.SendWebRequestAsync(uri);
+            var jObject = JObject.Parse(response);
+            return ConstructGraphResponse(jObject);
         }
         
         private GraphResponse ConstructGraphResponse(JObject json)
         {
             var response = new GraphResponse();
-
-            var gRespAverage = new GraphResponse.GraphPointList();
-            var gRespDaily = new GraphResponse.GraphPointList();
-            var avgGP = new List<GraphResponse.GraphPoint>();
-            var dailyGP = new List<GraphResponse.GraphPoint>();
+        
             var posixTime = DateTime.SpecifyKind(new DateTime(1970, 1, 1), DateTimeKind.Utc);
 
-            foreach (Newtonsoft.Json.Linq.JProperty property in json["average"].Children())
+            foreach (JProperty property in json["average"].Children())
             {
-                avgGP.Add(new GraphResponse.GraphPoint()
+                response.Average.GraphPoints.Add(new GraphPoint
+                    {
+                        Date = posixTime.AddMilliseconds(Convert.ToInt64(property.Name)),
+                        Price = property.Value.ToObject<int>()
+                    });
+            }
+            foreach (JProperty property in json["daily"].Children())
+            {
+                response.Daily.GraphPoints.Add(new GraphPoint
                 {
                     Date = posixTime.AddMilliseconds(Convert.ToInt64(property.Name)),
                     Price = property.Value.ToObject<int>()
                 });
             }
-            foreach (Newtonsoft.Json.Linq.JProperty property in json["daily"].Children())
-            {
-                dailyGP.Add(new GraphResponse.GraphPoint()
-                {
-                    Date = posixTime.AddMilliseconds(Convert.ToInt64(property.Name)),
-                    Price = property.Value.ToObject<int>()
-                });
-            }
-            gRespAverage.GraphPoints = avgGP;
-            gRespDaily.GraphPoints = dailyGP;
-            response.Average = gRespAverage;
-            response.Daily = gRespDaily;
 
             return response;
         }
