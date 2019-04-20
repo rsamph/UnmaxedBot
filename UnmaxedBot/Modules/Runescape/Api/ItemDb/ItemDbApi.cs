@@ -39,7 +39,7 @@ namespace UnmaxedBot.Modules.Runescape.Api.ItemDb
             }
         }
 
-        public async Task<ItemsResponse> GetCategoryPage(ItemCategory category, char letter, int pageNumber)
+        public async Task<CataloguePage> GetCategoryPage(ItemCategory category, char letter, int pageNumber)
         {
             var categoryId = (int)category;
             var uri = UriBuilder.Catalogue().Page(categoryId, letter, pageNumber).Build();
@@ -47,7 +47,7 @@ namespace UnmaxedBot.Modules.Runescape.Api.ItemDb
             try
             {
                 var response = await _client.SendWebRequestAsync(uri);
-                return JsonConvert.DeserializeObject<ItemsResponse>(response);
+                return JsonConvert.DeserializeObject<CataloguePage>(response);
             }
             catch (Exception ex)
             {
@@ -56,14 +56,15 @@ namespace UnmaxedBot.Modules.Runescape.Api.ItemDb
             }
         }
 
-        public async Task<DetailResponse> GetItemDetailAsync(int itemId)
+        public async Task<ItemDetail> GetItemDetailAsync(int itemId)
         {
             var uri = UriBuilder.Catalogue().ItemDetail(itemId).Build();
 
             try
             {
                 var response = await _client.SendWebRequestAsync(uri);
-                return JsonConvert.DeserializeObject<DetailResponse>(response);
+                var itemResponse = JsonConvert.DeserializeObject<ItemDetailResponse>(response);
+                return itemResponse.Item;
             }
             catch (Exception ex)
             {
@@ -93,8 +94,8 @@ namespace UnmaxedBot.Modules.Runescape.Api.ItemDb
         {
             var response = new GraphResponse();
 
-            var gRespAverage = new GraphResponse.Average();
-            var gRespDaily = new GraphResponse.Daily();
+            var gRespAverage = new GraphResponse.GraphPointList();
+            var gRespDaily = new GraphResponse.GraphPointList();
             var avgGP = new List<GraphResponse.GraphPoint>();
             var dailyGP = new List<GraphResponse.GraphPoint>();
             var posixTime = DateTime.SpecifyKind(new DateTime(1970, 1, 1), DateTimeKind.Utc);
@@ -103,22 +104,22 @@ namespace UnmaxedBot.Modules.Runescape.Api.ItemDb
             {
                 avgGP.Add(new GraphResponse.GraphPoint()
                 {
-                    date = posixTime.AddMilliseconds(Convert.ToInt64(property.Name)),
-                    price = property.Value.ToObject<int>()
+                    Date = posixTime.AddMilliseconds(Convert.ToInt64(property.Name)),
+                    Price = property.Value.ToObject<int>()
                 });
             }
             foreach (Newtonsoft.Json.Linq.JProperty property in json["daily"].Children())
             {
                 dailyGP.Add(new GraphResponse.GraphPoint()
                 {
-                    date = posixTime.AddMilliseconds(Convert.ToInt64(property.Name)),
-                    price = property.Value.ToObject<int>()
+                    Date = posixTime.AddMilliseconds(Convert.ToInt64(property.Name)),
+                    Price = property.Value.ToObject<int>()
                 });
             }
             gRespAverage.GraphPoints = avgGP;
             gRespDaily.GraphPoints = dailyGP;
-            response.average = gRespAverage;
-            response.daily = gRespDaily;
+            response.Average = gRespAverage;
+            response.Daily = gRespDaily;
 
             return response;
         }

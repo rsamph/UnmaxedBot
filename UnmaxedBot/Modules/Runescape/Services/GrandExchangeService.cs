@@ -56,11 +56,11 @@ namespace UnmaxedBot.Modules.Runescape.Services
             var graph = await _itemDb.GetItemGraphAsync(item.Id);
             if (graph == null) return null;
 
-            var latestPrice = graph.daily.GraphPoints
-                .OrderByDescending(g => g.date).FirstOrDefault();
+            var latestPrice = graph.Daily.GraphPoints
+                .OrderByDescending(g => g.Date).FirstOrDefault();
             if (latestPrice == null) return null;
 
-            return latestPrice.price;
+            return latestPrice.Price;
         }
     }
 }

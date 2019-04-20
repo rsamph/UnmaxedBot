@@ -23,14 +23,14 @@ namespace UnmaxedBot.Modules.Runescape.Converters
             throw new Exception($"PriceCheckResult for {priceCheck.CachedItem.Name} does not have any matches!");
         }
 
-        private EmbedBuilder ToEmbed(DetailResponse itemDetails, int? amount, int? exactPrice)
+        private EmbedBuilder ToEmbed(ItemDetail itemDetails, int? amount, int? exactPrice)
         {
             var description = new StringBuilder();
-            description.Append(itemDetails.item.description);
-            description.Append($" [[GE]](http://services.runescape.com/m=itemdb_rs/unmaxed/viewitem?obj={itemDetails.item.id})");
+            description.Append(itemDetails.Description);
+            description.Append($" [[GE]](http://services.runescape.com/m=itemdb_rs/unmaxed/viewitem?obj={itemDetails.Id})");
             description.Append("\n");
             description.Append("```css");
-            description.Append($"\nCurrent Price: {itemDetails.item.current.price} gp ({itemDetails.item.today.price.Replace(" ", "")} gp)");
+            description.Append($"\nCurrent Price: {itemDetails.Current.Price} gp ({itemDetails.Today.Price.Replace(" ", "")} gp)");
             if (amount.HasValue && exactPrice.HasValue)
             {
                 double totalPrice = (double)amount.Value * exactPrice.Value;
@@ -38,17 +38,17 @@ namespace UnmaxedBot.Modules.Runescape.Converters
             }
             description.Append("```");
             
-            var lastMonth = itemDetails.item.day30.change;
-            var lastQuarter = itemDetails.item.day90.change;
-            var lastSixMonths = itemDetails.item.day180.change;
+            var lastMonth = itemDetails.Day30.Change;
+            var lastQuarter = itemDetails.Day90.Change;
+            var lastSixMonths = itemDetails.Day180.Change;
             description.Append("```css\n");
             description.Append($"Trend: month {lastMonth} | quarter {lastQuarter} | six months {lastSixMonths}");
             description.Append("```");
 
             return new EmbedBuilder()
-                .WithAuthor(itemDetails.item.name)
+                .WithAuthor(itemDetails.Name)
                 .WithDescription(description.ToString())
-                .WithThumbnailUrl(itemDetails.item.icon);
+                .WithThumbnailUrl(itemDetails.Icon);
         }
     }
 }

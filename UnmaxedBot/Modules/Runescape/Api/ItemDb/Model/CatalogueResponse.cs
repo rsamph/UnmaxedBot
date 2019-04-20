@@ -1,16 +1,14 @@
-﻿using System.Collections.Generic;
+﻿using Newtonsoft.Json;
+using System.Collections.Generic;
 
 namespace UnmaxedBot.Modules.Runescape.Api.ItemDb.Model
 {
-    public class CatalogueResponse
+    public partial class CatalogueResponse
     {
-        public List<object> types { get; set; }
-        public List<Alpha> alpha { get; set; }
+        [JsonProperty("types")]
+        public List<object> Types { get; set; }
 
-        public class Alpha
-        {
-            public string letter { get; set; }
-            public int items { get; set; }
-        }
+        [JsonProperty("alpha")]
+        public List<CatalogueAlpha> Alphabet { get; set; }
     }
 }

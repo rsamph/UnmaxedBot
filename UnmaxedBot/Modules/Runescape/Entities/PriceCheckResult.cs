@@ -7,8 +7,8 @@ namespace UnmaxedBot.Modules.Runescape.Entities
     public class PriceCheckResult : IEntity
     {
         public GrandExchangeItem CachedItem { get; set; }
-        public DetailResponse ExactMatch { get; set; }
-        public DetailResponse CloseMatch { get; set; }
+        public ItemDetail ExactMatch { get; set; }
+        public ItemDetail CloseMatch { get; set; }
         public int? ExactPrice { get; set; }
         public int? Amount { get; set; }
 
