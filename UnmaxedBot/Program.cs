@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using UnmaxedBot.Core;
 using UnmaxedBot.Core.Data;
 using UnmaxedBot.Core.Services;
+using UnmaxedBot.Modules.Registration.Services;
 using UnmaxedBot.Modules.Runescape.Api.HighscoreLite;
 using UnmaxedBot.Modules.Runescape.Api.ItemDb;
 using UnmaxedBot.Modules.Runescape.Services;
@@ -45,6 +46,7 @@ namespace UnmaxedBot
         private static void RegisterServices(IServiceCollection serviceCollection)
         {
             serviceCollection.AddSingleton<LogService>();
+            serviceCollection.AddSingleton<RegistrationService>();
             serviceCollection.AddSingleton<IObjectStore, JsonFileStore>();
             serviceCollection.AddSingleton<ItemDbApi>();
             serviceCollection.AddSingleton<HighscoreLiteApi>();

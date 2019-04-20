@@ -3,6 +3,7 @@ using System;
 using System.Threading.Tasks;
 using UnmaxedBot.Core;
 using UnmaxedBot.Core.Services;
+using UnmaxedBot.Modules.Registration.Services;
 using UnmaxedBot.Modules.Runescape.Entities;
 using UnmaxedBot.Modules.Runescape.Services;
 
@@ -12,15 +13,18 @@ namespace UnmaxedBot.Modules.Runescape
     {
         private readonly GrandExchangeService _grandExchangeService;
         private readonly HighscoreService _highscoreService;
+        private readonly RegistrationService _registrationService;
         
         public RunescapeModule(
             GrandExchangeService grandExchangeService, 
             HighscoreService highscoreService,
+            RegistrationService registrationService,
             LogService logService)
             :base(logService)
         {
             _grandExchangeService = grandExchangeService;
             _highscoreService = highscoreService;
+            _registrationService = registrationService;
         }
 
         [Command("pc"), Remarks("Retrieves the current price of the specified item")]
@@ -73,16 +77,21 @@ namespace UnmaxedBot.Modules.Runescape
 
             await Context.Message.DeleteAsync();
 
-            var player = playerName.Length > 0 ? playerName : Context.Message.Author.Username;
             try
             {
-                var highscoreResult = await _highscoreService.GetHighscoreAsync(player);
+                if (playerName.Length < 1)
+                {
+                    var registration = _registrationService.FindRegistration(Context.Message.Author);
+                    playerName = registration?.PlayerName ?? Context.Message.Author.Username;
+                }
+
+                var highscoreResult = await _highscoreService.GetHighscoreAsync(playerName);
                 highscoreResult.RequestType = requestType;
                 await ReplyAsync(highscoreResult);
             }
             catch (Exception ex)
             {
-                var userMessage = $"Sorry {Context.Message.Author.Username}, I did not find any highscores for player {player}";
+                var userMessage = $"Sorry {Context.Message.Author.Username}, I did not find any highscores for player {playerName}";
                 await HandleErrorAsync(userMessage, ex);
             }
         }
