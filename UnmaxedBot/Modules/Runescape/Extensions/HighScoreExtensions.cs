@@ -14,10 +14,10 @@ namespace UnmaxedBot.Modules.Runescape.Extensions
         {
             if (rank <= 0)
                 return "not ranked";
-            if (rank <= 1000)
-                return $"rank {rank}";
             if (rank <= 10000)
-                return $"top 10k";
+                return $"rank {rank}";
+            if (rank <= 25000)
+                return $"top 25k";
             if (rank <= 50000)
                 return $"top 50k";
             if (rank <= 100000)

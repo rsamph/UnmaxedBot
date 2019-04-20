@@ -62,5 +62,11 @@ namespace UnmaxedBot.Modules.Registration.Services
                 r.DiscordUserName == user.Username &&
                 r.DiscordDiscriminator == user.Discriminator);
         }
+
+        public UserRegistration FindRegistration(string userName)
+        {
+            return _registrations.SingleOrDefault(r =>
+                r.DiscordUserName == userName);
+        }
     }
 }
