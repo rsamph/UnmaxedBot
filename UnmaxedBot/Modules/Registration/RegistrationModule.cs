@@ -33,7 +33,7 @@ namespace UnmaxedBot.Modules.Registration
             }
             catch (Exception ex)
             {
-                var userMessage = $"Sorry {Context.Message.Author.Username}, I could register you with player name {playerName}";
+                var userMessage = $"Sorry {Context.Message.Author.Username}, I was unable to register you as {playerName}";
                 await HandleErrorAsync(userMessage, ex);
             }
         }
