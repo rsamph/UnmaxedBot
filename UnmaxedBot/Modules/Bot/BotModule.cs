@@ -39,9 +39,11 @@ namespace UnmaxedBot.Modules.Bot
                 {
                     await ReplyAsync(new CommandDetails(actualCommand));
                 }
-
-                var userMessage = $"Sorry {Context.Message.Author.Username}, I don't know the command '{command}'";
-                await ReplyAsync(userMessage);
+                else
+                {
+                    var userMessage = $"Sorry {Context.Message.Author.Username}, I don't know the command '{command}'";
+                    await ReplyAsync(userMessage);
+                }
             }
         }
 
