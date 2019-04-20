@@ -10,6 +10,7 @@ using UnmaxedBot.Core.Services;
 using UnmaxedBot.Modules.Registration.Services;
 using UnmaxedBot.Modules.Runescape.Api.HighscoreLite;
 using UnmaxedBot.Modules.Runescape.Api.ItemDb;
+using UnmaxedBot.Modules.Runescape.Api.MembersLite;
 using UnmaxedBot.Modules.Runescape.Services;
 
 namespace UnmaxedBot
@@ -50,8 +51,10 @@ namespace UnmaxedBot
             serviceCollection.AddSingleton<IObjectStore, JsonFileStore>();
             serviceCollection.AddSingleton<ItemDbApi>();
             serviceCollection.AddSingleton<HighscoreLiteApi>();
+            serviceCollection.AddSingleton<MembersLiteApi>();
             serviceCollection.AddSingleton<GrandExchangeService>();
             serviceCollection.AddSingleton<HighscoreService>();
+            serviceCollection.AddSingleton<ClanMemberService>();
             serviceCollection.AddSingleton<DiscordSocketClient>();
             serviceCollection.AddSingleton<CommandHandler>();
             serviceCollection.AddSingleton<CommandService>();

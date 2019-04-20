@@ -1,1 +1,1 @@
-dotnet build -r win-x64 -c Release -p:Version=1.1.0.1
+dotnet build -r win-x64 -c Release -p:Version=1.1.0.3

@@ -14,15 +14,18 @@ namespace UnmaxedBot.Modules.Clan
     {
         private readonly RegistrationService _registrationService;
         private readonly HighscoreService _highscoreService;
+        private readonly ClanMemberService _clanMemberService;
 
         public ClanModule(
             RegistrationService registrationService,
             HighscoreService highscoreService,
+            ClanMemberService clanMemberService,
             LogService logService) 
             : base(logService)
         {
             _registrationService = registrationService;
             _highscoreService = highscoreService;
+            _clanMemberService = clanMemberService;
         }
 
         [Command("whodis"), Remarks("Shows information about the specified player")]
