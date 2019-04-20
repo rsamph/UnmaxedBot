@@ -54,10 +54,12 @@ namespace UnmaxedBot.Modules.Clan
             try
             {
                 var highscoreResult = await _highscoreService.GetHighscoreAsync(playerName);
+                var clanMemberDetails = await _clanMemberService.GetClanMember(playerName);
                 var whois = new WhoisResult
                 {
                     PlayerName = playerName,
-                    Highscores = highscoreResult.Highscores
+                    Highscores = highscoreResult.Highscores,
+                    ClanMemberDetails = clanMemberDetails
                 };
                 await ReplyAsync(whois);
             }

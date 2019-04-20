@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using UnmaxedBot.Core.Http;
 using UnmaxedBot.Modules.Runescape.Api.MembersLite.Model;
 
@@ -15,6 +16,7 @@ namespace UnmaxedBot.Modules.Runescape.Api.MembersLite
             _client = new WebServiceClient(tryCount: 3);
         }
 
+        [Obsolete("Downloading the CSV is currently blocked with some kind of warning and user confirmation requirement.")]
         public async Task<ClanMemberList> GetClanMemberListAsync(string clanName)
         {
             var uri = UriBuilder.Clan(clanName).Build();

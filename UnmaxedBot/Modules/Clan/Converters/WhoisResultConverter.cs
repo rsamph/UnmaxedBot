@@ -22,6 +22,8 @@ namespace UnmaxedBot.Modules.Clan.Converters
             var favoriteActivity = whois.Highscores.Activities.Where(a => a.Rank > 0).OrderBy(a => a.Rank).First();
             var maxed = skills99 == 27;
 
+            if (whois.ClanMemberDetails != null)
+                description.Append($"Clannie ({whois.ClanMemberDetails.ClanRank})\n");
             description.Append($"Skill total: {overall.Level}");
             description.Append($"\nOverall XP: {overall.Experience.AsShorthandValue()} ({overall.Rank.AsReadableRank()})");
             description.Append($"\n{skills99} skills at level 99");
