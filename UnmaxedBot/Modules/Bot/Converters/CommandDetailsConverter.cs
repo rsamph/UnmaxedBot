@@ -1,9 +1,8 @@
 ﻿using Discord;
 using Discord.Commands;
-using System.Linq;
 using System.Text;
 using UnmaxedBot.Core;
-using UnmaxedBot.Core.Permissions;
+using UnmaxedBot.Core.Extensions;
 using UnmaxedBot.Modules.Bot.Entities;
 
 namespace UnmaxedBot.Modules.Bot.Converters
@@ -14,7 +13,7 @@ namespace UnmaxedBot.Modules.Bot.Converters
         {
             var title = new StringBuilder();
             title.Append($"Command !{details.Command.Name}");
-            if (details.Command.Preconditions.Any(p => p.Group == BotPermission.Admin))
+            if (details.Command.IsAdminCommand())
                 title.Append($" (admin)");
             
             var description = new StringBuilder();
