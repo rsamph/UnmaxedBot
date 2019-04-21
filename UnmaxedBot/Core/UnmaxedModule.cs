@@ -9,8 +9,6 @@ namespace UnmaxedBot.Core
 {
     public abstract class UnmaxedModule : ModuleBase<SocketCommandContext>
     {
-        protected string Version => GetType().Assembly.GetName().Version.ToString();
-
         protected LogService _logService;
 
         public UnmaxedModule(

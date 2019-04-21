@@ -27,7 +27,7 @@ namespace UnmaxedBot.Core.Extensions
 
         public static EmbedBuilder WithUnmaxedFooter(this EmbedBuilder embedBuilder, string authorName)
         {
-            var version = embedBuilder.GetType().Assembly.GetName().Version.ToString();
+            var version = typeof(EmbedBuilderExtensions).Assembly.GetName().Version.ToString();
             return embedBuilder
                 .WithFooter(footer => footer.Text = $"UnmaxedBot v{version} • Requested by {authorName}");
         }
