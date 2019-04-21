@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using UnmaxedBot.Core;
 using UnmaxedBot.Core.Data;
 using UnmaxedBot.Core.Services;
+using UnmaxedBot.Modules.Clan.Services;
 using UnmaxedBot.Modules.Registration.Services;
 using UnmaxedBot.Modules.Runescape.Api.HighscoreLite;
 using UnmaxedBot.Modules.Runescape.Api.ItemDb;
@@ -55,6 +56,7 @@ namespace UnmaxedBot
             serviceCollection.AddSingleton<GrandExchangeService>();
             serviceCollection.AddSingleton<HighscoreService>();
             serviceCollection.AddSingleton<ClanMemberService>();
+            serviceCollection.AddSingleton<ItemDropRateService>();
             serviceCollection.AddSingleton<DiscordSocketClient>();
             serviceCollection.AddSingleton<CommandHandler>();
             serviceCollection.AddSingleton<CommandService>();
