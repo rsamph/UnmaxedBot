@@ -22,8 +22,6 @@ namespace UnmaxedBot.Modules.Registration
         [Command("reg"), Remarks("Allows you to register yourself with a player name other than your discord name")]
         public async Task Register([Remainder]string playerName)
         {
-            await LogMessage();
-
             await Context.Message.DeleteAsync();
 
             try
@@ -41,8 +39,6 @@ namespace UnmaxedBot.Modules.Registration
         [Command("ign"), Remarks("Shows you the player name you have registered with")]
         public async Task GetPlayerName()
         {
-            await LogMessage();
-
             await Context.Message.DeleteAsync();
 
             try
@@ -63,8 +59,6 @@ namespace UnmaxedBot.Modules.Registration
         [Command("unreg"), Remarks("Allows you to unregister yourself")]
         public async Task Unregister()
         {
-            await LogMessage();
-
             await Context.Message.DeleteAsync();
 
             try

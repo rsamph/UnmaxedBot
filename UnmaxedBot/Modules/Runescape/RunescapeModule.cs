@@ -30,8 +30,6 @@ namespace UnmaxedBot.Modules.Runescape
         [Command("pc"), Remarks("Retrieves the current price of the specified item")]
         public async Task PriceCheck([Remainder]string itemName)
         {
-            await LogMessage();
-
             await Context.Message.DeleteAsync();
 
             try
@@ -73,8 +71,6 @@ namespace UnmaxedBot.Modules.Runescape
 
         private async Task Highscore(HighScoreRequestType requestType, string playerName = "")
         {
-            await LogMessage();
-
             await Context.Message.DeleteAsync();
 
             try

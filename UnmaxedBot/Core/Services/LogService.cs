@@ -1,5 +1,4 @@
 ﻿using Discord;
-using Discord.WebSocket;
 using System;
 using System.Threading.Tasks;
 
@@ -9,7 +8,7 @@ namespace UnmaxedBot.Core.Services
     {
         public bool LogStacktrace { get; set; }
 
-        public Task Log(SocketUserMessage msg)
+        public Task Log(IUserMessage msg)
         {
             var entry = new LogMessage(
                 LogSeverity.Info,

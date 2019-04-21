@@ -31,8 +31,6 @@ namespace UnmaxedBot.Modules.Clan
         [Command("whodis"), Remarks("Shows information about the specified player")]
         public async Task Whois([Remainder]string playerName = "")
         {
-            await LogMessage();
-
             await Context.Message.DeleteAsync();
 
             if (playerName.Length < 1)

@@ -23,8 +23,6 @@ namespace UnmaxedBot.Modules.Bot
         [Command("unmaxed"), Remarks("Shows all available commands or the specified command's details")]
         public async Task Unmaxed(string command = null)
         {
-            await _logService.Log(Context.Message);
-
             await Context.Message.DeleteAsync();
 
             if (command == null)
@@ -50,8 +48,6 @@ namespace UnmaxedBot.Modules.Bot
         [Command("spaghet"), Remarks("Retrieves the bot version and link to the source code")]
         public async Task Spaghet()
         {
-            await _logService.Log(Context.Message);
-
             await Context.Message.DeleteAsync();
             
             await ReplyAsync(new Spaghet { RequestedBy = Context.Message.Author.Username });
