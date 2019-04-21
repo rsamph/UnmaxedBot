@@ -74,6 +74,26 @@ namespace UnmaxedBot.Modules.Clan
                 await HandleErrorAsync(userMessage, ex);
             }
         }
+        
+        [Command("contrib"), Remarks("Shows a list of the top content contributors")]
+        public async Task Contrib()
+        {
+            await Context.Message.DeleteAsync();
+
+            try
+            {
+                var result = new TopContributorsResult
+                {
+                    DropRateContributors = _itemDropRateService.GetContributors()
+                };
+                await ReplyAsync(result);
+            }
+            catch (Exception ex)
+            {
+                var userMessage = $"Sorry {Context.Message.Author.Username}, I was unable to retrieve the top contributors";
+                await HandleErrorAsync(userMessage, ex);
+            }
+        }
 
         [Command("odds"), Remarks("Shows the drop rate (odds) of the specified item")]
         public async Task DropRate([Remainder]string itemName)
@@ -161,7 +181,7 @@ namespace UnmaxedBot.Modules.Clan
             }
             catch (Exception ex)
             {
-                var userMessage = $"Sorry {Context.Message.Author.Username}, I could remove the drop rate with key #{key}";
+                var userMessage = $"Sorry {Context.Message.Author.Username}, I was unable to remove the drop rate with key #{key}";
                 await HandleErrorAsync(userMessage, ex);
             }
         }

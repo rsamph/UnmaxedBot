@@ -9,6 +9,8 @@
         public string DiscordUserName { get; set; }
         public string DiscordDiscriminator { get; set; }
 
+        public string DiscordHandle => $"{DiscordUserName}#{DiscordDiscriminator}";
+
         public override string ToString()
         {
             return $"{DropRate} | {ItemName} | {Source}";

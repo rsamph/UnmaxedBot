@@ -84,6 +84,18 @@ namespace UnmaxedBot.Modules.Clan.Services
             return Enumerable.Empty<ItemDropRate>();
         }
 
+        public IEnumerable<Contributor> GetContributors()
+        {
+            return _dropRates
+                .GroupBy(r => r.DiscordHandle)
+                .Select(group => new Contributor
+                {
+                    DiscordUserName = group.First().DiscordUserName,
+                    DiscordDiscriminator = group.First().DiscordDiscriminator,
+                    NumberOfContributions = group.Count()
+                });
+        }
+
         private ItemDropRate FindDropRateExact(string itemName, string source)
         {
             return _dropRates.SingleOrDefault(r =>
