@@ -1,5 +1,6 @@
 ﻿using Discord.Commands;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 using UnmaxedBot.Core;
 using UnmaxedBot.Core.Services;
@@ -14,17 +15,20 @@ namespace UnmaxedBot.Modules.Runescape
         private readonly GrandExchangeService _grandExchangeService;
         private readonly HighscoreService _highscoreService;
         private readonly RegistrationService _registrationService;
-        
+        private readonly ClanMemberService _clanMemberService;
+
         public RunescapeModule(
             GrandExchangeService grandExchangeService, 
             HighscoreService highscoreService,
             RegistrationService registrationService,
+            ClanMemberService clanMemberService,
             LogService logService)
             :base(logService)
         {
             _grandExchangeService = grandExchangeService;
             _highscoreService = highscoreService;
             _registrationService = registrationService;
+            _clanMemberService = clanMemberService;
         }
 
         [Command("pc"), Remarks("Retrieves the current price of the specified item")]
@@ -41,6 +45,46 @@ namespace UnmaxedBot.Modules.Runescape
             catch (Exception ex)
             {
                 var userMessage = $"Sorry {Context.Message.Author.Username}, I could not find the price of item {itemName}";
+                await HandleErrorAsync(userMessage, ex);
+            }
+        }
+
+        [Command("whodis"), Remarks("Shows information about the specified player")]
+        public async Task Whois([Remainder]string playerName = "")
+        {
+            await Context.Message.DeleteAsync();
+
+            if (playerName.Length < 1)
+            {
+                var registration = _registrationService.FindRegistration(Context.Message.Author);
+                playerName = registration?.PlayerName ?? Context.Message.Author.Username;
+            }
+            else if (Context.Message.MentionedUsers.Any())
+            {
+                var registration = _registrationService.FindRegistration(Context.Message.MentionedUsers.First());
+                playerName = registration?.PlayerName ?? Context.Message.MentionedUsers.First().Username;
+            }
+            else
+            {
+                var registration = _registrationService.FindRegistration(playerName);
+                playerName = registration?.PlayerName ?? playerName;
+            }
+
+            try
+            {
+                var highscoreResult = await _highscoreService.GetHighscoreAsync(playerName);
+                var clanMemberDetails = await _clanMemberService.GetClanMember(playerName);
+                var whois = new WhoisResult
+                {
+                    PlayerName = playerName,
+                    Highscores = highscoreResult.Highscores,
+                    ClanMemberDetails = clanMemberDetails
+                };
+                await ReplyAsync(whois);
+            }
+            catch (Exception ex)
+            {
+                var userMessage = $"Sorry {Context.Message.Author.Username}, I don't know this {playerName}";
                 await HandleErrorAsync(userMessage, ex);
             }
         }

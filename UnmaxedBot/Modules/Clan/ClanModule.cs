@@ -34,46 +34,6 @@ namespace UnmaxedBot.Modules.Clan
             _clanMemberService = clanMemberService;
             _itemDropRateService = itemDropRateService;
         }
-
-        [Command("whodis"), Remarks("Shows information about the specified player")]
-        public async Task Whois([Remainder]string playerName = "")
-        {
-            await Context.Message.DeleteAsync();
-
-            if (playerName.Length < 1)
-            {
-                var registration = _registrationService.FindRegistration(Context.Message.Author);
-                playerName = registration?.PlayerName ?? Context.Message.Author.Username;
-            }
-            else if (Context.Message.MentionedUsers.Any())
-            {
-                var registration = _registrationService.FindRegistration(Context.Message.MentionedUsers.First());
-                playerName = registration?.PlayerName ?? Context.Message.MentionedUsers.First().Username;
-            }
-            else
-            {
-                var registration = _registrationService.FindRegistration(playerName);
-                playerName = registration?.PlayerName ?? playerName;
-            }
-            
-            try
-            {
-                var highscoreResult = await _highscoreService.GetHighscoreAsync(playerName);
-                var clanMemberDetails = await _clanMemberService.GetClanMember(playerName);
-                var whois = new WhoisResult
-                {
-                    PlayerName = playerName,
-                    Highscores = highscoreResult.Highscores,
-                    ClanMemberDetails = clanMemberDetails
-                };
-                await ReplyAsync(whois);
-            }
-            catch (Exception ex)
-            {
-                var userMessage = $"Sorry {Context.Message.Author.Username}, I don't know this {playerName}";
-                await HandleErrorAsync(userMessage, ex);
-            }
-        }
         
         [Command("contrib"), Remarks("Shows a list of the top content contributors")]
         public async Task Contrib()

@@ -13,11 +13,6 @@ namespace UnmaxedBot.Modules.Bot.Converters
         {
             var description = new StringBuilder();
 
-            //description.Append("```css\n");
-            //description.Append($"!{commandList.HelperCommand.Name} {{command}} for command details");
-            //description.Append(" ");
-            //description.Append("```");
-            
             description.Append("```css\n");
             foreach (var command in commandList.Commands.Where(c => c != commandList.HelperCommand && !c.IsAdminCommand()))
             {

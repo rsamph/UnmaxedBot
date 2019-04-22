@@ -2,11 +2,11 @@
 using System.Linq;
 using System.Text;
 using UnmaxedBot.Core;
-using UnmaxedBot.Modules.Clan.Entities;
 using UnmaxedBot.Modules.Runescape.Api.HighscoreLite.Model;
+using UnmaxedBot.Modules.Runescape.Entities;
 using UnmaxedBot.Modules.Runescape.Extensions;
 
-namespace UnmaxedBot.Modules.Clan.Converters
+namespace UnmaxedBot.Modules.Runescape.Converters
 {
     public class WhoisResultConverter : IEntityConverter<WhoisResult>
     {

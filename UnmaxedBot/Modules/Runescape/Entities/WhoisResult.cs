@@ -1,9 +1,9 @@
 ﻿using UnmaxedBot.Core;
-using UnmaxedBot.Modules.Clan.Converters;
 using UnmaxedBot.Modules.Runescape.Api.HighscoreLite.Model;
 using UnmaxedBot.Modules.Runescape.Api.MembersLite.Model;
+using UnmaxedBot.Modules.Runescape.Converters;
 
-namespace UnmaxedBot.Modules.Clan.Entities
+namespace UnmaxedBot.Modules.Runescape.Entities
 {
     public class WhoisResult : IEntity
     {
