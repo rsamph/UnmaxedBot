@@ -18,7 +18,9 @@ namespace UnmaxedBot.Modules.Contrib.Converters
             foreach (var guide in result.Guides)
             {
                 description.Append("```css\n");
-                description.Append($"#{guide.ContribKey} • {guide.Topic} ({guide.Remarks})");
+                description.Append($"#{guide.ContribKey} • {guide.Topic}");
+                if (!string.IsNullOrEmpty(guide.Remarks))
+                    description.Append($" ({guide.Remarks})");
                 description.Append("```");
                 description.Append($"{guide.Uri}\n");
             }
