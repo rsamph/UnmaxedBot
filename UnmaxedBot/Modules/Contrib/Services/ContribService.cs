@@ -1,6 +1,7 @@
 ﻿using Discord.WebSocket;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using UnmaxedBot.Core.Data;
 using UnmaxedBot.Modules.Contrib.Entities;
@@ -22,6 +23,7 @@ namespace UnmaxedBot.Modules.Contrib.Services
 
         public Task AddContrib<T>(T contrib, SocketUser creator) where T : IContrib
         {
+            contrib.ContribKey = NextKey();
             contrib.Contributor = new Contributor
             {
                 DiscordUserName = creator.Username,
@@ -30,13 +32,11 @@ namespace UnmaxedBot.Modules.Contrib.Services
 
             if (contrib is DropRate)
             {
-                contrib.ContribKey = _dropRateStore.NextKey();
                 _dropRateStore.Add(contrib as DropRate);
                 return Task.CompletedTask;
             }
             if (contrib is Guide)
             {
-                contrib.ContribKey = _guideStore.NextKey();
                 _guideStore.Add(contrib as Guide);
                 return Task.CompletedTask;
             }
@@ -46,9 +46,17 @@ namespace UnmaxedBot.Modules.Contrib.Services
 
         public Task Remove(int contribKey)
         {
-            // Todo: shared contrib key?
-            _dropRateStore.Remove(contribKey);
-            return Task.CompletedTask;
+            if (_dropRateStore.Keys.Contains(contribKey))
+            {
+                _dropRateStore.Remove(contribKey);
+                return Task.CompletedTask;
+            }
+            if (_guideStore.Keys.Contains(contribKey))
+            {
+                _guideStore.Remove(contribKey);
+                return Task.CompletedTask;
+            }
+            throw new Exception($"Key not found {contribKey}");
         }
 
         public bool Exists<T>(T contrib) where T : IContrib
@@ -68,8 +76,11 @@ namespace UnmaxedBot.Modules.Contrib.Services
 
         public IContrib FindByContribKey(int contribKey)
         {
-            // Todo: shared contrib key?
-            return _dropRateStore.FindByContribKey(contribKey);
+            if (_dropRateStore.Keys.Contains(contribKey))
+                return _dropRateStore.FindByContribKey(contribKey);
+            if (_guideStore.Keys.Contains(contribKey))
+                return _guideStore.FindByContribKey(contribKey);
+            throw new Exception($"Key not found {contribKey}");
         }
 
         public IContrib FindByNaturalKey(IContrib contrib)
@@ -104,6 +115,21 @@ namespace UnmaxedBot.Modules.Contrib.Services
                 return _guideStore.GetContributors();
 
             throw new Exception($"Could not find a contrib store for type {typeof(T)}");
+        }
+
+        private int NextKey()
+        {
+            var allKeys = _dropRateStore.Keys.ToList();
+            allKeys.AddRange(_guideStore.Keys);
+
+            if (allKeys.Count < 1) return 1;
+        
+            // Reuse keys
+            for (int i = 1; i < allKeys.Count; i++)
+            {
+                if (!allKeys.Contains(i)) return i;
+            }
+            return allKeys.Count + 1;
         }
     }
 }

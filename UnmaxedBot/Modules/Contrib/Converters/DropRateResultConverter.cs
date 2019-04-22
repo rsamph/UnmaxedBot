@@ -15,12 +15,12 @@ namespace UnmaxedBot.Modules.Contrib.Converters
 
             var description = new StringBuilder();
             description.Append($"Contributed by {contributors}");
-            foreach (var dropRate in result.DropRates)
+            description.Append("```css\n");
+            foreach (var dropRate in result.DropRates.OrderBy(r => r.ItemName))
             {
-                description.Append("```css\n");
-                description.Append($"#{dropRate.ContribKey} • {dropRate.ItemName} ({dropRate.Rate}) from {dropRate.Source}");
-                description.Append("```");
+                description.Append($"#{dropRate.ContribKey} • {dropRate.ItemName} ({dropRate.Rate}) from {dropRate.Source}\n");
             }
+            description.Append("```");
 
             return new EmbedBuilder()
                 .WithAuthor("Drop rates for " + result.ItemName)

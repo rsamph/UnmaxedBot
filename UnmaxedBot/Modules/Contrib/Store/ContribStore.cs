@@ -10,9 +10,11 @@ namespace UnmaxedBot.Modules.Contrib.Store
     public abstract class ContribStore<T> : IContribStore<T> where T : IContrib
     {
         public abstract string StoreKey { get; }
+        public IEnumerable<int> Keys => _cache.Select(c => c.ContribKey);
+
         protected IObjectStore _objectStore;
         protected List<T> _cache;
-
+        
         public ContribStore(IObjectStore objectStore)
         {
             _objectStore = objectStore;
@@ -64,12 +66,6 @@ namespace UnmaxedBot.Modules.Contrib.Store
         public bool Exists(T contrib)
         {
             return FindByNaturalKey(contrib) != null;
-        }
-
-        public int NextKey()
-        {
-            return _cache.Any() ?
-                _cache.Select(c => c.ContribKey).Max() + 1 : 1;
         }
 
         public bool KeyExists(int contribKey)
