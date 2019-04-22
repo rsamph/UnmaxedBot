@@ -8,8 +8,9 @@ namespace UnmaxedBot.Modules.Contrib.Entities
     public class TopContributorsResult : IEntity
     {
         public IEnumerable<Contributor> DropRateContributors { get; set; }
+        public IEnumerable<Contributor> GuideContributors { get; set; }
 
-        public int NumberOfContributors => DropRateContributors.Count();
+        public int NumberOfContributors => DropRateContributors.Count() + GuideContributors.Count();
 
         public object ToResponse()
         {

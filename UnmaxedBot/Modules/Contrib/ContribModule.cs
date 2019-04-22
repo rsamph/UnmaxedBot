@@ -36,7 +36,8 @@ namespace UnmaxedBot.Modules.Contrib
             {
                 var result = new TopContributorsResult
                 {
-                    DropRateContributors = _contribService.GetContributors<DropRate>()
+                    DropRateContributors = _contribService.GetContributors<DropRate>(),
+                    GuideContributors = _contribService.GetContributors<Guide>()
                 };
                 await ReplyAsync(result);
             }
@@ -109,6 +110,72 @@ namespace UnmaxedBot.Modules.Contrib
             catch (Exception ex)
             {
                 var userMessage = $"Sorry {Context.Message.Author.Username}, I was unable to add that drop rate";
+                await HandleErrorAsync(userMessage, ex);
+            }
+        }
+
+        [Command("guide"), Remarks("Shows all guides for specified topic")]
+        public async Task GetGuides([Remainder]string topic)
+        {
+            await Context.Message.DeleteAsync();
+
+            try
+            {
+                var guides = _contribService.FindGuides(topic);
+                if (!guides.Any())
+                {
+                    await ReplyAsync($"Sorry {Context.Message.Author.Username}, I could not find any guides for {topic}");
+                }
+                else
+                {
+                    var result = new GuideResult
+                    {
+                        Topic = topic,
+                        Guides = guides
+                    };
+                    await ReplyAsync(result);
+                }
+            }
+            catch (Exception ex)
+            {
+                var userMessage = $"Sorry {Context.Message.Author.Username}, I could not find any guides for {topic}";
+                await HandleErrorAsync(userMessage, ex);
+            }
+        }
+
+        [Command("addguide"),
+            Remarks(@"Adds a guide for the specified topic
+                      E.g. !addguide Araxxor http://rangerax.com The Range guide")]
+        public async Task AddGuide(string topic, string uri, [Remainder]string remarks)
+        {
+            await Context.Message.DeleteAsync();
+
+            try
+            {
+                var input = string.Join(" ", topic, uri, remarks);
+                if (!Guide.TryParse(input, out var guide))
+                {
+                    await ReplyAsync($"Sorry {Context.Message.Author.Username}, that guide is in an incorrect format");
+                }
+                else if (_contribService.Exists(guide))
+                {
+                    await ReplyAsync($"Sorry {Context.Message.Author.Username}, this guide already exist");
+                    var result = new GuideResult
+                    {
+                        Topic = guide.Topic,
+                        Guides = new[] { _contribService.FindByNaturalKey(guide) as Guide }
+                    };
+                    await ReplyAsync(result);
+                }
+                else
+                {
+                    await _contribService.AddContrib(guide, Context.Message.Author);
+                    await ReplyAsync($"Ok {Context.Message.Author.Username}, the guide has been added");
+                }
+            }
+            catch (Exception ex)
+            {
+                var userMessage = $"Sorry {Context.Message.Author.Username}, I was unable to add that guide";
                 await HandleErrorAsync(userMessage, ex);
             }
         }
