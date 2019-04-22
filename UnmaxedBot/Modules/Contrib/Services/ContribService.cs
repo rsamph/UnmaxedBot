@@ -1,66 +1,59 @@
 ﻿using Discord.WebSocket;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using UnmaxedBot.Core.Data;
 using UnmaxedBot.Modules.Contrib.Entities;
+using UnmaxedBot.Modules.Contrib.Store;
 
 namespace UnmaxedBot.Modules.Contrib.Services
 {
     public class ContribService
     {
-        private readonly IObjectStore _objectStore;
-        private List<IContrib> _cache;
-        private const string storeKey = @"droprates";
+        private readonly IContribStore<DropRate> _dropRateStore;
 
         public ContribService(
             IObjectStore objectStore)
         {
-            _objectStore = objectStore;
-
-            if (_objectStore.KeyExists(storeKey))
-                _cache = objectStore.LoadObject<List<DropRate>>(storeKey).Cast<IContrib>().ToList();
-            else
-                _cache = new List<IContrib>();
+            _dropRateStore = new DropRateStore(objectStore);
         }
 
         public Task AddContrib<T>(T contrib, SocketUser creator) where T : IContrib
         {
-            if (Exists(contrib))
-                throw new Exception($"Contrib already exists: {contrib}");
-
-            contrib.ContribKey = _cache.Any() ? 
-                _cache.Select(c => c.ContribKey).Max() + 1 : 1;
             contrib.Contributor = new Contributor
             {
                 DiscordUserName = creator.Username,
                 DiscordDiscriminator = creator.Discriminator
             };
-
-            _cache.Add(contrib);
-
-            _objectStore.SaveObject(_cache, storeKey);
-
+            
+            if (typeof(T) == typeof(DropRate))
+            {
+                contrib.ContribKey = _dropRateStore.NextKey();
+                _dropRateStore.Add(contrib as DropRate);
+            }
+            else
+            {
+                throw new Exception($"Could not find a contrib store for type {typeof(T)}");
+            }
             return Task.CompletedTask;
         }
 
         public Task Remove(int contribKey)
         {
-            var contrib = FindByContribKey(contribKey);
-            if (contrib == null)
-                throw new Exception($"The key doesn't exist: {contribKey}");
-
-            _cache.Remove(contrib);
-
-            _objectStore.SaveObject(_cache, storeKey);
-
+            _dropRateStore.Remove(contribKey);
             return Task.CompletedTask;
         }
 
         public bool Exists<T>(T contrib) where T : IContrib
         {
-            return FindByNaturalKey(contrib) != null;
+            if (typeof(T) == typeof(DropRate))
+            {
+                return _dropRateStore.Exists(contrib as DropRate);
+            }
+            else
+            {
+                throw new Exception($"Could not find a contrib store for type {typeof(T)}");
+            }
         }
 
         public bool KeyExists(int contribKey)
@@ -70,38 +63,23 @@ namespace UnmaxedBot.Modules.Contrib.Services
 
         public IContrib FindByContribKey(int contribKey)
         {
-            return _cache.SingleOrDefault(c => c.ContribKey == contribKey);
+            return _dropRateStore.FindByContribKey(contribKey);
         }
 
-        public IContrib FindByNaturalKey<T>(T contrib) where T : IContrib
+        public IContrib FindByNaturalKey(IContrib contrib)
         {
-            return _cache.SingleOrDefault(c => c.NaturalKey == contrib.NaturalKey);
+            return _dropRateStore.FindByNaturalKey(contrib as DropRate);
         }
 
         public IEnumerable<DropRate> FindDropRates(string itemName)
         {
-            var matches = _cache.Cast<DropRate>().Where(r => r.ItemName.Equals(itemName, StringComparison.OrdinalIgnoreCase));
-            if (matches.Any()) return matches;
-
-            matches = _cache.Cast<DropRate>().Where(r => r.ItemName.StartsWith(itemName, StringComparison.OrdinalIgnoreCase));
-            if (matches.Any()) return matches;
-
-            matches = _cache.Cast<DropRate>().Where(r => r.ItemName.Contains(itemName, StringComparison.OrdinalIgnoreCase));
-            if (matches.Any()) return matches;
-
-            return Enumerable.Empty<DropRate>();
+            var droprateStore = _dropRateStore as DropRateStore;
+            return droprateStore.FindByItemName(itemName);
         }
         
         public IEnumerable<Contributor> GetContributors<T>() where T : IContrib
         {
-            return _cache.Cast<T>()
-                .GroupBy(c => c.Contributor.DiscordHandle)
-                .Select(group => new Contributor
-                {
-                    DiscordUserName = group.First().Contributor.DiscordUserName,
-                    DiscordDiscriminator = group.First().Contributor.DiscordDiscriminator,
-                    NumberOfContributions = group.Count()
-                });
+            return _dropRateStore.GetContributors();
         }
     }
 }

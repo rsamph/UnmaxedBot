@@ -127,9 +127,9 @@ namespace UnmaxedBot.Modules.Contrib
                 }
                 else
                 {
-                    var dropRate = _contribService.FindByContribKey(key);
+                    var contrib = _contribService.FindByContribKey(key);
                     await _contribService.Remove(key);
-                    await ReplyAsync($"Ok {Context.Message.Author.Username}, the contribution has been removed:\n{dropRate}");
+                    await ReplyAsync($"Ok {Context.Message.Author.Username}, the contribution has been removed:\n{contrib}");
                 }
             }
             catch (Exception ex)
