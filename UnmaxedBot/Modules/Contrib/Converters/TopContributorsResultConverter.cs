@@ -27,7 +27,7 @@ namespace UnmaxedBot.Modules.Contrib.Converters
                 var contribOdds = contributor.Odds > 0 ? $"{contributor.Odds} odds" : "";
                 var contribGuides = contributor.Guides > 0 ? $"{contributor.Guides} guides" : "";
                 var contribs = string.Join(", ", contribOdds, contribGuides);
-                description.Append($"#{++rank} • {contributor.Contributor.DiscordUserName} ({contribs})");
+                description.Append($"#{++rank} • {contributor.Contributor.DiscordUserName} ({contribs})\n");
             }
             description.Append("```");
 
