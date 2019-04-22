@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using UnmaxedBot.Core;
-using UnmaxedBot.Modules.Clan.Converters;
+using UnmaxedBot.Modules.Contrib.Converters;
 
-namespace UnmaxedBot.Modules.Clan.Entities
+namespace UnmaxedBot.Modules.Contrib.Entities
 {
     public class TopContributorsResult : IEntity
     {

@@ -1,8 +1,8 @@
 ﻿using System.Linq;
 using System.Text.RegularExpressions;
-using UnmaxedBot.Modules.Clan.Entities;
+using UnmaxedBot.Modules.Contrib.Entities;
 
-namespace UnmaxedBot.Modules.Clan.Parsers
+namespace UnmaxedBot.Modules.Contrib.Parsers
 {
     public static class ItemDropRateParser
     {

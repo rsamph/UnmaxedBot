@@ -6,32 +6,25 @@ using System.Threading.Tasks;
 using UnmaxedBot.Core;
 using UnmaxedBot.Core.Permissions;
 using UnmaxedBot.Core.Services;
-using UnmaxedBot.Modules.Clan.Entities;
-using UnmaxedBot.Modules.Clan.Parsers;
-using UnmaxedBot.Modules.Clan.Services;
+using UnmaxedBot.Modules.Contrib.Entities;
+using UnmaxedBot.Modules.Contrib.Parsers;
+using UnmaxedBot.Modules.Contrib.Services;
 using UnmaxedBot.Modules.Registration.Services;
-using UnmaxedBot.Modules.Runescape.Services;
 
-namespace UnmaxedBot.Modules.Clan
+namespace UnmaxedBot.Modules.Contrib
 {
-    public class ClanModule : UnmaxedModule
+    public class ContribModule : UnmaxedModule
     {
         private readonly RegistrationService _registrationService;
-        private readonly HighscoreService _highscoreService;
-        private readonly ClanMemberService _clanMemberService;
         private readonly ItemDropRateService _itemDropRateService;
 
-        public ClanModule(
+        public ContribModule(
             RegistrationService registrationService,
-            HighscoreService highscoreService,
-            ClanMemberService clanMemberService,
             ItemDropRateService itemDropRateService,
             LogService logService) 
             : base(logService)
         {
             _registrationService = registrationService;
-            _highscoreService = highscoreService;
-            _clanMemberService = clanMemberService;
             _itemDropRateService = itemDropRateService;
         }
         

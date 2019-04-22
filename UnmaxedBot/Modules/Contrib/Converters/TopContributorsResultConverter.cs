@@ -1,9 +1,9 @@
 ﻿using Discord;
 using System.Text;
 using UnmaxedBot.Core;
-using UnmaxedBot.Modules.Clan.Entities;
+using UnmaxedBot.Modules.Contrib.Entities;
 
-namespace UnmaxedBot.Modules.Clan.Converters
+namespace UnmaxedBot.Modules.Contrib.Converters
 {
     public class TopContributorsResultConverter : IEntityConverter<TopContributorsResult>
     {

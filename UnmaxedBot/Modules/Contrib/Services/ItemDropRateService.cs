@@ -4,9 +4,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using UnmaxedBot.Core.Data;
-using UnmaxedBot.Modules.Clan.Entities;
+using UnmaxedBot.Modules.Contrib.Entities;
 
-namespace UnmaxedBot.Modules.Clan.Services
+namespace UnmaxedBot.Modules.Contrib.Services
 {
     public class ItemDropRateService
     {

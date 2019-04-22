@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using UnmaxedBot.Core;
 using UnmaxedBot.Core.Data;
 using UnmaxedBot.Core.Services;
-using UnmaxedBot.Modules.Clan.Services;
+using UnmaxedBot.Modules.Contrib.Services;
 using UnmaxedBot.Modules.Registration.Services;
 using UnmaxedBot.Modules.Runescape.Api.HighscoreLite;
 using UnmaxedBot.Modules.Runescape.Api.ItemDb;

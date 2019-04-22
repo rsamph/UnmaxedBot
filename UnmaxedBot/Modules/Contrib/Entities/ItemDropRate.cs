@@ -1,4 +1,4 @@
-﻿namespace UnmaxedBot.Modules.Clan.Entities
+﻿namespace UnmaxedBot.Modules.Contrib.Entities
 {
     public class ItemDropRate
     {
