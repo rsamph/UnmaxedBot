@@ -25,7 +25,9 @@ namespace UnmaxedBot.Modules.Contrib.Converters
             foreach (var contributor in topContributors)
             {
                 var contribOdds = contributor.Odds > 0 ? $"{contributor.Odds} odds" : "";
-                var contribGuides = contributor.Guides > 0 ? $"{contributor.Guides} guides" : "";
+                var contribGuides = "";
+                if (contributor.Guides > 0)
+                    contribGuides = contributor.Guides > 1 ? $"{contributor.Guides} guides" : $"{contributor.Guides} guide";
                 var contribs = string.Join(", ", contribOdds, contribGuides);
                 description.Append($"#{++rank} • {contributor.Contributor.DiscordUserName} ({contribs})\n");
             }
