@@ -1,32 +1,25 @@
-﻿using System.Linq;
-using System.Text.RegularExpressions;
+﻿using System.Text.RegularExpressions;
 using UnmaxedBot.Modules.Contrib.Entities;
 
 namespace UnmaxedBot.Modules.Contrib.Parsers
 {
     public static class ItemDropRateParser
     {
-        private const char ParameterSeparator = '|';
+        private const string RegexPattern = @"^(.*)(\d+\/\d+)(.*)$";
 
         public static bool TryParse(string input, out ItemDropRate itemDropRate)
         {
             itemDropRate = null;
-            
-            var paramaters = input.Split(ParameterSeparator)
-                .Select(p => p.Trim())
-                .ToList();
-            if (paramaters.Count != 3)
-                return false;
 
-            var dropRateInCorrectFormat = Regex.IsMatch(paramaters[0], @"^\d+\/\d+$");
-            if (!dropRateInCorrectFormat)
-                return false;
+            var regex = new Regex(RegexPattern, RegexOptions.IgnoreCase);
+            var match = regex.Match(input);
+            if (!match.Success) return false;
 
             itemDropRate = new ItemDropRate
             {
-                DropRate = paramaters[0],
-                ItemName = paramaters[1],
-                Source = paramaters[2]
+                ItemName = match.Groups[1].Value,
+                DropRate = match.Groups[2].Value,
+                Source = match.Groups[3].Value
             };
             return true;
         }

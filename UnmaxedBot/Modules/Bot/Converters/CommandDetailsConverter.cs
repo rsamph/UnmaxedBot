@@ -24,10 +24,6 @@ namespace UnmaxedBot.Modules.Bot.Converters
             ParameterInfo previousParameter = null;
             foreach (var parameter in details.Command.Parameters)
             {
-                // Two subsequent string parameters are separated by a pipe
-                if (parameter.Type == typeof(string) && previousParameter != null && previousParameter.Type == typeof(string))
-                    description.Append("| ");
-
                 if (parameter.IsOptional)
                     description.Append("{" + parameter.Name + "} ");
                 else

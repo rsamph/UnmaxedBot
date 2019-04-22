@@ -13,7 +13,7 @@
 
         public override string ToString()
         {
-            return $"{DropRate} | {ItemName} | {Source}";
+            return $"{ItemName} {DropRate} {Source}";
         }
     }
 }

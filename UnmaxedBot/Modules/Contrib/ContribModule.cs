@@ -79,14 +79,14 @@ namespace UnmaxedBot.Modules.Contrib
 
         [Command("addodds"),
             Remarks(@"Adds a drop rate (odds) for the specified item
-                      E.g. !addodds 1/40 | Spider leg top | Araxxor")]
-        public async Task AddDropRate(string odds, string itemName, [Remainder]string source)
+                      E.g. !addodds Spider leg top 1/40 Araxxor")]
+        public async Task AddDropRate(string itemName, string odds, [Remainder]string source)
         {
             await Context.Message.DeleteAsync();
 
             try
             {
-                if (!ItemDropRateParser.TryParse(odds + itemName + source, out var dropRate))
+                if (!ItemDropRateParser.TryParse(itemName + odds + source, out var dropRate))
                 {
                     await ReplyAsync($"Sorry {Context.Message.Author.Username}, that drop rate is in an incorrect format");
                 }
