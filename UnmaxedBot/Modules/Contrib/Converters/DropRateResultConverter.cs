@@ -11,14 +11,14 @@ namespace UnmaxedBot.Modules.Contrib.Converters
         public object ConvertToResponse(DropRateResult result)
         {
             var contributors = string.Join(", ",
-                result.DropRates.Select(r => r.DiscordUserName).Distinct());
+                result.DropRates.Select(r => r.Contributor.DiscordUserName).Distinct());
 
             var description = new StringBuilder();
             description.Append($"Contributed by {contributors}");
             foreach (var dropRate in result.DropRates)
             {
                 description.Append("```css\n");
-                description.Append($"#{dropRate.Key} • {dropRate.ItemName} ({dropRate.DropRate}) from {dropRate.Source}");
+                description.Append($"#{dropRate.ContribKey} • {dropRate.ItemName} ({dropRate.Rate}) from {dropRate.Source}");
                 description.Append("```");
             }
 

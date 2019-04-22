@@ -56,7 +56,7 @@ namespace UnmaxedBot
             serviceCollection.AddSingleton<GrandExchangeService>();
             serviceCollection.AddSingleton<HighscoreService>();
             serviceCollection.AddSingleton<ClanMemberService>();
-            serviceCollection.AddSingleton<ItemDropRateService>();
+            serviceCollection.AddSingleton<ContribService>();
             serviceCollection.AddSingleton<DiscordSocketClient>();
             serviceCollection.AddSingleton<CommandHandler>();
             serviceCollection.AddSingleton<CommandService>();

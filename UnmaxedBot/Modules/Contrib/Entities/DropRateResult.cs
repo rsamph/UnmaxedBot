@@ -7,7 +7,7 @@ namespace UnmaxedBot.Modules.Contrib.Entities
     public class DropRateResult : IEntity
     {
         public string ItemName { get; set; }
-        public IEnumerable<ItemDropRate> DropRates { get; set; }
+        public IEnumerable<DropRate> DropRates { get; set; }
 
         public object ToResponse()
         {

@@ -9,15 +9,19 @@ namespace UnmaxedBot.Modules.Contrib.Converters
     {
         public object ConvertToResponse(TopContributorsResult result)
         {
+            if (result.NumberOfContributors < 1)
+            {
+                return "There are no contributions yet";
+            }
+            
             var description = new StringBuilder();
+            
             description.Append("```css\n");
-
             int rank = 0;
             foreach (var contributor in result.DropRateContributors)
             {
-                description.Append($"#{++rank} • {contributor.DiscordUserName} (added {contributor.NumberOfContributions} drop rates)");
+                description.Append($"#{++rank} • {contributor.DiscordUserName} (added {contributor.NumberOfContributions} odds)");
             }
-
             description.Append("```");
 
             return new EmbedBuilder()

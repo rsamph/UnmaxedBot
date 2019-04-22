@@ -7,7 +7,6 @@ using UnmaxedBot.Core;
 using UnmaxedBot.Core.Permissions;
 using UnmaxedBot.Core.Services;
 using UnmaxedBot.Modules.Contrib.Entities;
-using UnmaxedBot.Modules.Contrib.Parsers;
 using UnmaxedBot.Modules.Contrib.Services;
 using UnmaxedBot.Modules.Registration.Services;
 
@@ -16,16 +15,16 @@ namespace UnmaxedBot.Modules.Contrib
     public class ContribModule : UnmaxedModule
     {
         private readonly RegistrationService _registrationService;
-        private readonly ItemDropRateService _itemDropRateService;
+        private readonly ContribService _contribService;
 
         public ContribModule(
             RegistrationService registrationService,
-            ItemDropRateService itemDropRateService,
+            ContribService contribService,
             LogService logService) 
             : base(logService)
         {
             _registrationService = registrationService;
-            _itemDropRateService = itemDropRateService;
+            _contribService = contribService;
         }
         
         [Command("contrib"), Remarks("Shows a list of the top content contributors")]
@@ -37,7 +36,7 @@ namespace UnmaxedBot.Modules.Contrib
             {
                 var result = new TopContributorsResult
                 {
-                    DropRateContributors = _itemDropRateService.GetContributors()
+                    DropRateContributors = _contribService.GetContributors<DropRate>()
                 };
                 await ReplyAsync(result);
             }
@@ -49,13 +48,13 @@ namespace UnmaxedBot.Modules.Contrib
         }
 
         [Command("odds"), Remarks("Shows the drop rate (odds) of the specified item")]
-        public async Task DropRate([Remainder]string itemName)
+        public async Task GetDropRates([Remainder]string itemName)
         {
             await Context.Message.DeleteAsync();
 
             try
             {
-                var dropRates = _itemDropRateService.FindDropRates(itemName);
+                var dropRates = _contribService.FindDropRates(itemName);
                 if (!dropRates.Any())
                 {
                     await ReplyAsync($"Sorry {Context.Message.Author.Username}, I could not find any drop rates for {itemName}");
@@ -86,23 +85,24 @@ namespace UnmaxedBot.Modules.Contrib
 
             try
             {
-                if (!ItemDropRateParser.TryParse(itemName + odds + source, out var dropRate))
+                var input = string.Join(" ", itemName, odds, source);
+                if (!DropRate.TryParse(input, out var dropRate))
                 {
                     await ReplyAsync($"Sorry {Context.Message.Author.Username}, that drop rate is in an incorrect format");
                 }
-                else if (_itemDropRateService.Exists(dropRate))
+                else if (_contribService.Exists(dropRate))
                 {
                     await ReplyAsync($"Sorry {Context.Message.Author.Username}, these odds already exist");
                     var result = new DropRateResult
                     {
                         ItemName = dropRate.ItemName,
-                        DropRates = _itemDropRateService.FindDropRates(dropRate.ItemName)
+                        DropRates = new[] { _contribService.FindByNaturalKey(dropRate) as DropRate }
                     };
                     await ReplyAsync(result);
                 }
                 else
                 {
-                    await _itemDropRateService.Add(dropRate, Context.Message.Author);
+                    await _contribService.AddContrib(dropRate, Context.Message.Author);
                     await ReplyAsync($"Ok {Context.Message.Author.Username}, the drop rate has been added");
                 }
             }
@@ -113,28 +113,28 @@ namespace UnmaxedBot.Modules.Contrib
             }
         }
 
-        [Command("remodds"), Remarks("Removes a drop rate (odds) by its key")]
+        [Command("rem"), Remarks("Removes a contribution by its key")]
         [RequireUserPermission(GuildPermission.Administrator, Group = BotPermission.Admin)]
-        public async Task RemoveDropRate(int key)
+        public async Task RemoveContrib(int key)
         {
             await Context.Message.DeleteAsync();
 
             try
             {
-                if (!_itemDropRateService.KeyExists(key))
+                if (!_contribService.KeyExists(key))
                 {
-                    await ReplyAsync($"Sorry {Context.Message.Author.Username}, I could not find a drop rate with key #{key}");
+                    await ReplyAsync($"Sorry {Context.Message.Author.Username}, I could not find a contribution with key #{key}");
                 }
                 else
                 {
-                    var dropRate = _itemDropRateService.FindByKey(key);
-                    await _itemDropRateService.Remove(key);
-                    await ReplyAsync($"Ok {Context.Message.Author.Username}, the drop rate has been removed:\n{dropRate}");
+                    var dropRate = _contribService.FindByContribKey(key);
+                    await _contribService.Remove(key);
+                    await ReplyAsync($"Ok {Context.Message.Author.Username}, the contribution has been removed:\n{dropRate}");
                 }
             }
             catch (Exception ex)
             {
-                var userMessage = $"Sorry {Context.Message.Author.Username}, I was unable to remove the drop rate with key #{key}";
+                var userMessage = $"Sorry {Context.Message.Author.Username}, I was unable to remove the contribution with key #{key}";
                 await HandleErrorAsync(userMessage, ex);
             }
         }
