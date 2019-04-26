@@ -7,13 +7,15 @@ using UnmaxedBot.Modules.Contrib.Entities;
 
 namespace UnmaxedBot.Modules.Contrib.Store
 {
-    public abstract class ContribStore<T> : IContribStore<T> where T : IContrib
+    public abstract class ContribStore<T> : IContribStore<IContrib> where T : IContrib
     {
         public abstract string StoreKey { get; }
         public IEnumerable<int> Keys => _cache.Select(c => c.ContribKey);
 
         protected IObjectStore _objectStore;
-        protected List<T> _cache;
+        private List<IContrib> _cache;
+
+        protected List<T> Cache => _cache as List<T>;
         
         public ContribStore(IObjectStore objectStore)
         {
@@ -24,12 +26,12 @@ namespace UnmaxedBot.Modules.Contrib.Store
         private void InitializeStore()
         {
             if (_objectStore.KeyExists(StoreKey))
-                _cache = _objectStore.LoadObject<List<T>>(StoreKey).ToList();
+                _cache = _objectStore.LoadObject<List<IContrib>>(StoreKey).ToList();
             else
-                _cache = new List<T>();
+                _cache = new List<IContrib>();
         }
 
-        public Task Add(T contrib)
+        public Task Add(IContrib contrib)
         {
             if (Exists(contrib))
                 throw new Exception($"Contrib already exists: {contrib}");
@@ -63,7 +65,7 @@ namespace UnmaxedBot.Modules.Contrib.Store
                 });
         }
 
-        public bool Exists(T contrib)
+        public bool Exists(IContrib contrib)
         {
             return FindByNaturalKey(contrib) != null;
         }
@@ -73,12 +75,12 @@ namespace UnmaxedBot.Modules.Contrib.Store
             return FindByContribKey(contribKey) != null;
         }
 
-        public T FindByContribKey(int contribKey)
+        public IContrib FindByContribKey(int contribKey)
         {
             return _cache.SingleOrDefault(c => c.ContribKey == contribKey);
         }
 
-        public T FindByNaturalKey(T contrib)
+        public IContrib FindByNaturalKey(IContrib contrib)
         {
             return _cache.SingleOrDefault(c => c.NaturalKey == contrib.NaturalKey);
         }

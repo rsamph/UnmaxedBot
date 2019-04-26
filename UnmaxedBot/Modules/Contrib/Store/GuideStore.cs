@@ -17,13 +17,13 @@ namespace UnmaxedBot.Modules.Contrib.Store
 
         public IEnumerable<Guide> FindByTopic(string topic)
         {
-            var matches = _cache.Where(r => r.Topic.Equals(topic, StringComparison.OrdinalIgnoreCase));
+            var matches = Cache.Where(r => r.Topic.Equals(topic, StringComparison.OrdinalIgnoreCase));
             if (matches.Any()) return matches;
 
-            matches = _cache.Where(r => r.Topic.StartsWith(topic, StringComparison.OrdinalIgnoreCase));
+            matches = Cache.Where(r => r.Topic.StartsWith(topic, StringComparison.OrdinalIgnoreCase));
             if (matches.Any()) return matches;
 
-            matches = _cache.Where(r => r.Topic.Contains(topic, StringComparison.OrdinalIgnoreCase));
+            matches = Cache.Where(r => r.Topic.Contains(topic, StringComparison.OrdinalIgnoreCase));
             if (matches.Any()) return matches;
 
             return Enumerable.Empty<Guide>();
