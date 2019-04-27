@@ -7,6 +7,7 @@ namespace UnmaxedBot.Modules.Contrib.Store
     public interface IContribStore<T> where T : IContrib
     {
         IEnumerable<int> Keys { get; }
+        IEnumerable<T> All { get; }
 
         Task Add(T contrib);
         Task Remove(int contribKey);

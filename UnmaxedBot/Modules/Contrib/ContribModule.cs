@@ -184,6 +184,35 @@ namespace UnmaxedBot.Modules.Contrib
             }
         }
 
+        [Command("guides"),
+            Remarks("Shows all guide topics")]
+        public async Task GetGuideTopics()
+        {
+            await Context.Message.DeleteAsync();
+
+            try
+            {
+                var topics = _contribService.GetGuideTopics();
+                if (!topics.Any())
+                {
+                    await ReplyAsync($"Sorry {Context.Message.Author.Username}, I could not find any guide topics");
+                }
+                else
+                {
+                    var result = new GuideTopics
+                    {
+                        Topics = topics
+                    };
+                    await ReplyAsync(result);
+                }
+            }
+            catch (Exception ex)
+            {
+                var userMessage = $"Sorry {Context.Message.Author.Username}, I could not find any guide topics";
+                await HandleErrorAsync(userMessage, ex);
+            }
+        }
+
         [Command("alias"),
             Remarks("Shows all aliases for specified name")]
         public async Task GetAliases([Remainder]string name)

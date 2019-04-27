@@ -11,6 +11,7 @@ namespace UnmaxedBot.Modules.Contrib.Store
     {
         public abstract string StoreKey { get; }
         public IEnumerable<int> Keys => _cache.Select(c => c.ContribKey);
+        public IEnumerable<T> All => _cache.AsReadOnly();
 
         protected IObjectStore _objectStore;
         protected List<T> _cache;

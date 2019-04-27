@@ -1,5 +1,6 @@
 ﻿using Discord.WebSocket;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using UnmaxedBot.Core.Data;
 using UnmaxedBot.Modules.Contrib.Entities;
@@ -72,6 +73,12 @@ namespace UnmaxedBot.Modules.Contrib.Services
                 foreach (var guide in aliasGuides)
                     yield return guide;
             }
+        }
+
+        public IEnumerable<string> GetGuideTopics()
+        {
+            var guideStore = _stores.GetStore<Guide>() as GuideStore;
+            return guideStore.All.Select(g => g.Topic).Distinct();
         }
 
         public IEnumerable<Alias> FindAliases(string name)
