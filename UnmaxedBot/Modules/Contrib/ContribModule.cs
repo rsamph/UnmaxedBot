@@ -198,8 +198,7 @@ namespace UnmaxedBot.Modules.Contrib
                 }
                 else
                 {
-                    var contrib = _contribService.FindByContribKey(key);
-                    await _contribService.Remove(key);
+                    var contrib = _contribService.Remove(key);
                     await ReplyAsync($"Ok {Context.Message.Author.Username}, the contribution has been removed:\n{contrib}");
                 }
             }

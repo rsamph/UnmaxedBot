@@ -30,10 +30,9 @@ namespace UnmaxedBot.Modules.Contrib.Services
             return Task.CompletedTask;
         }
 
-        public Task Remove(int contribKey)
+        public IContrib Remove(int contribKey)
         {
-            _stores.GetStore(contribKey).Remove(contribKey);
-            return Task.CompletedTask;
+            return _stores.Remove(contribKey);
         }
 
         public bool Exists<T>(T contrib) where T : IContrib
@@ -43,13 +42,7 @@ namespace UnmaxedBot.Modules.Contrib.Services
 
         public bool KeyExists(int contribKey)
         {
-            return FindByContribKey(contribKey) != null;
-        }
-
-        public IContrib FindByContribKey(int contribKey)
-        {
-            return _stores.GetStore(contribKey)
-                .FindByContribKey(contribKey);
+            return _stores.KeyExists(contribKey);
         }
 
         public IContrib FindByNaturalKey(IContrib contrib)
