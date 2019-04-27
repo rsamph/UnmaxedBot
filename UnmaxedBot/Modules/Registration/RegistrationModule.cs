@@ -10,6 +10,7 @@ namespace UnmaxedBot.Modules.Registration
     public class RegistrationModule : UnmaxedModule
     {
         private readonly RegistrationService _registrationService;
+        private const string GroupPrefix = "Registration";
 
         public RegistrationModule(
             RegistrationService registrationService,
@@ -19,7 +20,8 @@ namespace UnmaxedBot.Modules.Registration
             _registrationService = registrationService;
         }
 
-        [Command("reg"), Remarks("Allows you to register yourself with a player name other than your discord name")]
+        [Command("reg"), 
+            Remarks("Allows you to register yourself with a player name other than your discord name")]
         public async Task Register([Remainder]string playerName)
         {
             await Context.Message.DeleteAsync();
@@ -36,7 +38,8 @@ namespace UnmaxedBot.Modules.Registration
             }
         }
 
-        [Command("ign"), Remarks("Shows you the player name you have registered with")]
+        [Command("ign"), 
+            Remarks("Shows you the player name you have registered with")]
         public async Task GetPlayerName()
         {
             await Context.Message.DeleteAsync();
@@ -56,7 +59,8 @@ namespace UnmaxedBot.Modules.Registration
             }
         }
 
-        [Command("unreg"), Remarks("Allows you to unregister yourself")]
+        [Command("unreg"), 
+            Remarks("Allows you to unregister yourself")]
         public async Task Unregister()
         {
             await Context.Message.DeleteAsync();

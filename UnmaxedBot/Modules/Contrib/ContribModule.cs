@@ -27,7 +27,8 @@ namespace UnmaxedBot.Modules.Contrib
             _contribService = contribService;
         }
         
-        [Command("contrib"), Remarks("Shows a list of the top content contributors")]
+        [Command("contrib"), 
+            Remarks("Shows a list of the top content contributors")]
         public async Task Contrib()
         {
             await Context.Message.DeleteAsync();
@@ -48,7 +49,8 @@ namespace UnmaxedBot.Modules.Contrib
             }
         }
 
-        [Command("odds"), Remarks("Shows the drop rate (odds) of the specified item")]
+        [Command("odds"), 
+            Remarks("Shows the drop rate (odds) of the specified item")]
         public async Task GetDropRates([Remainder]string itemName)
         {
             await Context.Message.DeleteAsync();
@@ -114,7 +116,8 @@ namespace UnmaxedBot.Modules.Contrib
             }
         }
 
-        [Command("guide"), Remarks("Shows all guides for specified topic")]
+        [Command("guide"), 
+            Remarks("Shows all guides for specified topic")]
         public async Task GetGuides([Remainder]string topic)
         {
             await Context.Message.DeleteAsync();
@@ -180,7 +183,8 @@ namespace UnmaxedBot.Modules.Contrib
             }
         }
 
-        [Command("rem"), Remarks("Removes a contribution by its key")]
+        [Command("rem"), 
+            Remarks("Removes a contribution by its key")]
         [RequireUserPermission(GuildPermission.Administrator, Group = BotPermission.Admin)]
         public async Task RemoveContrib(int key)
         {

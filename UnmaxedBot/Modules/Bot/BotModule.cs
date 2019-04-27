@@ -20,7 +20,8 @@ namespace UnmaxedBot.Modules.Bot
             _commandService = commandService;
         }
 
-        [Command("unmaxed"), Remarks("Shows all available commands or the specified command's details")]
+        [Command("unmaxed"), 
+            Remarks("Shows all available commands or the specified command's details")]
         public async Task Unmaxed(string command = null)
         {
             await Context.Message.DeleteAsync();
@@ -45,7 +46,8 @@ namespace UnmaxedBot.Modules.Bot
             }
         }
 
-        [Command("spaghet"), Remarks("Retrieves the bot version and link to the source code")]
+        [Command("spaghet"), 
+            Remarks("Retrieves the bot version and link to the source code")]
         public async Task Spaghet()
         {
             await Context.Message.DeleteAsync();

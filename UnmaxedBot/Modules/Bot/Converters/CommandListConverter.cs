@@ -11,17 +11,25 @@ namespace UnmaxedBot.Modules.Bot.Converters
     {
         public object ConvertToResponse(CommandList commandList)
         {
+            var commandsGroupedByModule = commandList.Commands
+                .Where(c => !c.IsAdminCommand())
+                .GroupBy(c => c.Module);
+
             var description = new StringBuilder();
 
-            description.Append("```css\n");
-            foreach (var command in commandList.Commands.Where(c => c != commandList.HelperCommand && !c.IsAdminCommand()))
+            foreach (var moduleGroup in commandsGroupedByModule)
             {
-                description.Append($"!{command.Name}");
-                description.Append(" ");
+                description.Append(moduleGroup.Key.Name.Replace("Module", ""));
+                description.Append("```css\n");
+                foreach (var command in moduleGroup)
+                {
+                    description.Append($"!{command.Name}");
+                    description.Append(" ");
+                }
+                description.Append("```\n");
             }
-            description.Append("```");
 
-            description.Append("\nAdministrators:");
+            description.Append("Administrators");
             description.Append("```css\n");
             foreach (var command in commandList.Commands.Where(c => c.IsAdminCommand()))
             {

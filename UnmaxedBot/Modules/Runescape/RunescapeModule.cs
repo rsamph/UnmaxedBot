@@ -31,7 +31,8 @@ namespace UnmaxedBot.Modules.Runescape
             _clanMemberService = clanMemberService;
         }
 
-        [Command("pc"), Remarks("Retrieves the current price of the specified item")]
+        [Command("pc"), 
+            Remarks("Retrieves the current price of the specified item")]
         public async Task PriceCheck([Remainder]string itemName)
         {
             await Context.Message.DeleteAsync();
@@ -49,7 +50,8 @@ namespace UnmaxedBot.Modules.Runescape
             }
         }
 
-        [Command("whodis"), Remarks("Shows information about the specified player")]
+        [Command("whodis"), 
+            Remarks("Shows information about the specified player")]
         public async Task Whois([Remainder]string playerName = "")
         {
             await Context.Message.DeleteAsync();
@@ -89,25 +91,29 @@ namespace UnmaxedBot.Modules.Runescape
             }
         }
 
-        [Command("clues"), Remarks("Retrieves a player's clue activities")]
+        [Command("clues"), 
+            Remarks("Retrieves a player's clue activities")]
         public async Task Clues(string playerName = "")
         {
             await Highscore(HighScoreRequestType.Clues, playerName);
         }
 
-        [Command("ba"), Remarks("Retrieves a player's barbarian assault score")]
+        [Command("ba"), 
+            Remarks("Retrieves a player's barbarian assault score")]
         public async Task BarbarianAssault(string playerName = "")
         {
             await Highscore(HighScoreRequestType.BarbarianAssault, playerName);
         }
 
-        [Command("act"), Remarks("Retrieves a player's top activities")]
+        [Command("act"), 
+            Remarks("Retrieves a player's top activities")]
         public async Task TopActivities(string playerName = "")
         {
             await Highscore(HighScoreRequestType.TopActivities, playerName);
         }
 
-        [Command("skills"), Remarks("Retrieves a player's top skills")]
+        [Command("skills"),
+            Remarks("Retrieves a player's top skills")]
         public async Task TopSkills(string playerName = "")
         {
             await Highscore(HighScoreRequestType.TopSkills, playerName);

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using UnmaxedBot.Core.Data;
 using UnmaxedBot.Modules.Contrib.Entities;
@@ -8,8 +7,6 @@ namespace UnmaxedBot.Modules.Contrib.Store
 {
     public class ContribStoreCollection
     {
-        private readonly IDictionary<Type, IContribStore<IContrib>> _stores;
-
         private readonly IContribStore<DropRate> _dropRateStore;
         private readonly IContribStore<Guide> _guideStore;
 
@@ -17,8 +14,6 @@ namespace UnmaxedBot.Modules.Contrib.Store
         {
             _dropRateStore = new DropRateStore(objectStore);
             _guideStore = new GuideStore(objectStore);
-
-            //_stores.Add(typeof(DropRate), new DropRateStore(objectStore));
         }
 
         public IContribStore<T> GetStore<T>() where T : IContrib
