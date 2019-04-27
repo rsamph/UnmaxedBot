@@ -62,17 +62,16 @@ namespace UnmaxedBot.Modules.Contrib.Services
         {
             var guideStore = _stores.GetStore<Guide>() as GuideStore;
 
-            var topicGuides = guideStore.FindByTopic(topic);
-            foreach (var guide in topicGuides)
-                yield return guide;
-
+            var guides = guideStore.FindByTopic(topic).ToList();
             var aliases = FindAliasesIndirect(topic);
             foreach (var alias in aliases)
             {
                 var aliasGuides = guideStore.FindByTopic(alias.Name);
-                foreach (var guide in aliasGuides)
-                    yield return guide;
+                guides.AddRange(aliasGuides);
             }
+            return guides  
+                    .GroupBy(g => g.NaturalKey)
+                    .Select(group => group.First());
         }
 
         public IEnumerable<string> GetGuideTopics()
