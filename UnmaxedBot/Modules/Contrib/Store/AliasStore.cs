@@ -28,5 +28,19 @@ namespace UnmaxedBot.Modules.Contrib.Store
 
             return Enumerable.Empty<Alias>();
         }
+
+        public IEnumerable<Alias> FindByAlias(string alsoKnownAs)
+        {
+            var matches = _cache.Where(r => r.AlsoKnownAs.Equals(alsoKnownAs, StringComparison.OrdinalIgnoreCase));
+            if (matches.Any()) return matches;
+
+            matches = _cache.Where(r => r.AlsoKnownAs.StartsWith(alsoKnownAs, StringComparison.OrdinalIgnoreCase));
+            if (matches.Any()) return matches;
+
+            matches = _cache.Where(r => r.AlsoKnownAs.Contains(alsoKnownAs, StringComparison.OrdinalIgnoreCase));
+            if (matches.Any()) return matches;
+
+            return Enumerable.Empty<Alias>();
+        }
     }
 }

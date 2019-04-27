@@ -53,23 +53,37 @@ namespace UnmaxedBot.Modules.Contrib.Services
 
         public IEnumerable<DropRate> FindDropRates(string itemName)
         {
-            // Todo: more generic search?
             var droprateStore = _stores.GetStore<DropRate>() as DropRateStore;
             return droprateStore.FindByItemName(itemName);
         }
 
         public IEnumerable<Guide> FindGuides(string topic)
         {
-            // Todo: more generic search?
             var guideStore = _stores.GetStore<Guide>() as GuideStore;
-            return guideStore.FindByTopic(topic);
+
+            var topicGuides = guideStore.FindByTopic(topic);
+            foreach (var guide in topicGuides)
+                yield return guide;
+
+            var aliases = FindAliasesIndirect(topic);
+            foreach (var alias in aliases)
+            {
+                var aliasGuides = guideStore.FindByTopic(alias.Name);
+                foreach (var guide in aliasGuides)
+                    yield return guide;
+            }
         }
 
         public IEnumerable<Alias> FindAliases(string name)
         {
-            // Todo: more generic search?
             var guideStore = _stores.GetStore<Alias>() as AliasStore;
             return guideStore.FindByName(name);
+        }
+
+        public IEnumerable<Alias> FindAliasesIndirect(string alsoKnownAs)
+        {
+            var guideStore = _stores.GetStore<Alias>() as AliasStore;
+            return guideStore.FindByAlias(alsoKnownAs);
         }
 
         public IEnumerable<Contributor> GetContributors<T>() where T : IContrib
