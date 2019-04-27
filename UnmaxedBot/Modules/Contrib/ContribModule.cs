@@ -4,6 +4,7 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using UnmaxedBot.Core;
+using UnmaxedBot.Core.Extensions;
 using UnmaxedBot.Core.Permissions;
 using UnmaxedBot.Core.Services;
 using UnmaxedBot.Modules.Contrib.Entities;
@@ -179,6 +180,73 @@ namespace UnmaxedBot.Modules.Contrib
             catch (Exception ex)
             {
                 var userMessage = $"Sorry {Context.Message.Author.Username}, I was unable to add that guide";
+                await HandleErrorAsync(userMessage, ex);
+            }
+        }
+
+        [Command("alias"),
+            Remarks("Shows all aliases for specified name")]
+        public async Task GetAliases([Remainder]string name)
+        {
+            await Context.Message.DeleteAsync();
+
+            try
+            {
+                var aliases = _contribService.FindAliases(name);
+                if (!aliases.Any())
+                {
+                    await ReplyAsync($"Sorry {Context.Message.Author.Username}, I could not find any aliases for {name}");
+                }
+                else
+                {
+                    var result = new AliasResult
+                    {
+                        Name = name,
+                        Aliases = aliases
+                    };
+                    await ReplyAsync(result);
+                }
+            }
+            catch (Exception ex)
+            {
+                var userMessage = $"Sorry {Context.Message.Author.Username}, I could not find any aliases for {name}";
+                await HandleErrorAsync(userMessage, ex);
+            }
+        }
+
+        [Command("addalias"),
+            Remarks(@"Adds an alias for the specified name
+                      E.g. !addalias Beastmaster bm")]
+        public async Task AddAlias(string name, [Remainder]string alsoKnownAs)
+        {
+            await Context.Message.DeleteAsync();
+
+            try
+            {
+                var alias = new Alias
+                {
+                    Name = name.ToPascalCase(),
+                    AlsoKnownAs = alsoKnownAs.ToPascalCase()
+                };
+                if (_contribService.Exists(alias))
+                {
+                    await ReplyAsync($"Sorry {Context.Message.Author.Username}, this alias already exist");
+                    var result = new AliasResult
+                    {
+                        Name = alias.Name,
+                        Aliases = new[] { _contribService.FindByNaturalKey(alias) as Alias }
+                    };
+                    await ReplyAsync(result);
+                }
+                else
+                {
+                    await _contribService.AddContrib(alias, Context.Message.Author);
+                    await ReplyAsync($"Ok {Context.Message.Author.Username}, the alias has been added");
+                }
+            }
+            catch (Exception ex)
+            {
+                var userMessage = $"Sorry {Context.Message.Author.Username}, I was unable to add that alias";
                 await HandleErrorAsync(userMessage, ex);
             }
         }

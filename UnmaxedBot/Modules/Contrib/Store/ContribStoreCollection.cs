@@ -10,11 +10,13 @@ namespace UnmaxedBot.Modules.Contrib.Store
     {
         private readonly IContribStore<DropRate> _dropRateStore;
         private readonly IContribStore<Guide> _guideStore;
+        private readonly IContribStore<Alias> _aliasStore;
 
         public ContribStoreCollection(IObjectStore objectStore)
         {
             _dropRateStore = new DropRateStore(objectStore);
             _guideStore = new GuideStore(objectStore);
+            _aliasStore = new AliasStore(objectStore);
         }
 
         public IContribStore<T> GetStore<T>() where T : IContrib
@@ -23,6 +25,8 @@ namespace UnmaxedBot.Modules.Contrib.Store
                 return _dropRateStore as IContribStore<T>;
             if (typeof(T) == typeof(Guide))
                 return _guideStore as IContribStore<T>;
+            if (typeof(T) == typeof(Alias))
+                return _aliasStore as IContribStore<T>;
 
             throw new Exception($"No store in collection for type {typeof(T)}");
         }
@@ -33,6 +37,8 @@ namespace UnmaxedBot.Modules.Contrib.Store
                 return _dropRateStore as IContribStore<IContrib>;
             if (contrib is Guide)
                 return _guideStore as IContribStore<IContrib>;
+            if (contrib is Alias)
+                return _aliasStore as IContribStore<IContrib>;
 
             throw new Exception($"No store in collection for type {contrib.GetType()}");
         }
@@ -51,6 +57,12 @@ namespace UnmaxedBot.Modules.Contrib.Store
                 _guideStore.Remove(contribKey);
                 return contrib;
             }
+            if (_aliasStore.Keys.Contains(contribKey))
+            {
+                var contrib = _aliasStore.FindByContribKey(contribKey);
+                _aliasStore.Remove(contribKey);
+                return contrib;
+            }
 
             throw new Exception($"No item in store collection with key {contribKey}");
         }
@@ -64,6 +76,7 @@ namespace UnmaxedBot.Modules.Contrib.Store
         {
             var allKeys = _dropRateStore.Keys.ToList();
             allKeys.AddRange(_guideStore.Keys);
+            allKeys.AddRange(_aliasStore.Keys);
             return allKeys;
         }
 

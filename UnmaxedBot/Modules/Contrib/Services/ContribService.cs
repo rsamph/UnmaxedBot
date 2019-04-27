@@ -65,6 +65,13 @@ namespace UnmaxedBot.Modules.Contrib.Services
             return guideStore.FindByTopic(topic);
         }
 
+        public IEnumerable<Alias> FindAliases(string name)
+        {
+            // Todo: more generic search?
+            var guideStore = _stores.GetStore<Alias>() as AliasStore;
+            return guideStore.FindByName(name);
+        }
+
         public IEnumerable<Contributor> GetContributors<T>() where T : IContrib
         {
             return _stores.GetStore<T>().GetContributors();
