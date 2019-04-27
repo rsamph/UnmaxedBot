@@ -17,13 +17,13 @@ namespace UnmaxedBot.Modules.Contrib.Store
 
         public IEnumerable<DropRate> FindByItemName(string itemName)
         {
-            var matches = Cache.Where(r => r.ItemName.Equals(itemName, StringComparison.OrdinalIgnoreCase));
+            var matches = _cache.Where(r => r.ItemName.Equals(itemName, StringComparison.OrdinalIgnoreCase));
             if (matches.Any()) return matches;
 
-            matches = Cache.Where(r => r.ItemName.StartsWith(itemName, StringComparison.OrdinalIgnoreCase));
+            matches = _cache.Where(r => r.ItemName.StartsWith(itemName, StringComparison.OrdinalIgnoreCase));
             if (matches.Any()) return matches;
 
-            matches = Cache.Where(r => r.ItemName.Contains(itemName, StringComparison.OrdinalIgnoreCase));
+            matches = _cache.Where(r => r.ItemName.Contains(itemName, StringComparison.OrdinalIgnoreCase));
             if (matches.Any()) return matches;
 
             return Enumerable.Empty<DropRate>();
