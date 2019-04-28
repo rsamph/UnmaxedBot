@@ -11,12 +11,14 @@ namespace UnmaxedBot.Modules.Contrib.Store
         private readonly IContribStore<DropRate> _dropRateStore;
         private readonly IContribStore<Guide> _guideStore;
         private readonly IContribStore<Alias> _aliasStore;
+        private readonly IContribStore<Note> _noteStore;
 
         public ContribStoreCollection(IObjectStore objectStore)
         {
             _dropRateStore = new DropRateStore(objectStore);
             _guideStore = new GuideStore(objectStore);
             _aliasStore = new AliasStore(objectStore);
+            _noteStore = new NoteStore(objectStore);
         }
 
         public IContribStore<T> GetStore<T>() where T : IContrib
@@ -27,6 +29,8 @@ namespace UnmaxedBot.Modules.Contrib.Store
                 return _guideStore as IContribStore<T>;
             if (typeof(T) == typeof(Alias))
                 return _aliasStore as IContribStore<T>;
+            if (typeof(T) == typeof(Note))
+                return _noteStore as IContribStore<T>;
 
             throw new Exception($"No store in collection for type {typeof(T)}");
         }
@@ -39,6 +43,8 @@ namespace UnmaxedBot.Modules.Contrib.Store
                 return _guideStore as IContribStore<IContrib>;
             if (contrib is Alias)
                 return _aliasStore as IContribStore<IContrib>;
+            if (contrib is Note)
+                return _noteStore as IContribStore<IContrib>;
 
             throw new Exception($"No store in collection for type {contrib.GetType()}");
         }
@@ -63,6 +69,26 @@ namespace UnmaxedBot.Modules.Contrib.Store
                 _aliasStore.Remove(contribKey);
                 return contrib;
             }
+            if (_noteStore.Keys.Contains(contribKey))
+            {
+                var contrib = _noteStore.FindByContribKey(contribKey);
+                _noteStore.Remove(contribKey);
+                return contrib;
+            }
+
+            throw new Exception($"No item in store collection with key {contribKey}");
+        }
+
+        public IContrib FindByContribKey(int contribKey)
+        {
+            if (_dropRateStore.Keys.Contains(contribKey))
+                return _dropRateStore.FindByContribKey(contribKey);
+            if (_guideStore.Keys.Contains(contribKey))
+                return _guideStore.FindByContribKey(contribKey);
+            if (_aliasStore.Keys.Contains(contribKey))
+                return _aliasStore.FindByContribKey(contribKey);
+            if (_noteStore.Keys.Contains(contribKey))
+                return _noteStore.FindByContribKey(contribKey);
 
             throw new Exception($"No item in store collection with key {contribKey}");
         }
@@ -77,6 +103,7 @@ namespace UnmaxedBot.Modules.Contrib.Store
             var allKeys = _dropRateStore.Keys.ToList();
             allKeys.AddRange(_guideStore.Keys);
             allKeys.AddRange(_aliasStore.Keys);
+            allKeys.AddRange(_noteStore.Keys);
             return allKeys;
         }
 

@@ -52,10 +52,21 @@ namespace UnmaxedBot.Modules.Contrib.Services
                 .FindByNaturalKey(contrib);
         }
 
+        public IContrib FindByContribKey(int contribKey)
+        {
+            return _stores.FindByContribKey(contribKey);
+        }
+
         public IEnumerable<DropRate> FindDropRates(string itemName)
         {
             var droprateStore = _stores.GetStore<DropRate>() as DropRateStore;
-            return droprateStore.FindByItemName(itemName);
+            var dropRates = droprateStore.FindByItemName(itemName);
+        
+            var noteStore = _stores.GetStore<Note>() as NoteStore;
+            foreach (var dropRate in dropRates)
+                dropRate.Notes = noteStore.FindByAssociation(dropRate.ContribKey);
+
+            return dropRates;
         }
 
         public IEnumerable<Guide> FindGuides(string topic)
@@ -90,6 +101,12 @@ namespace UnmaxedBot.Modules.Contrib.Services
         {
             var guideStore = _stores.GetStore<Alias>() as AliasStore;
             return guideStore.FindByAlias(alsoKnownAs);
+        }
+
+        public IEnumerable<Note> FindByAssociation(int associatedContribKey)
+        {
+            var noteStore = _stores.GetStore<Note>() as NoteStore;
+            return noteStore.FindByAssociation(associatedContribKey);
         }
 
         public IEnumerable<Contributor> GetContributors<T>() where T : IContrib

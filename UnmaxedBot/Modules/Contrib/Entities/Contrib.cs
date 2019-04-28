@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using System.Collections.Generic;
 
 namespace UnmaxedBot.Modules.Contrib.Entities
 {
@@ -8,6 +9,14 @@ namespace UnmaxedBot.Modules.Contrib.Entities
         public Contributor Contributor { get; set; }
 
         [JsonIgnore]
+        public IEnumerable<Note> Notes { get; set; }
+
+        [JsonIgnore]
         public abstract string NaturalKey { get; }
+
+        public Contrib()
+        {
+            Notes = new List<Note>();
+        }
     }
 }

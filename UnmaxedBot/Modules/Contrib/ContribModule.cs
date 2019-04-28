@@ -280,6 +280,50 @@ namespace UnmaxedBot.Modules.Contrib
             }
         }
 
+        [Command("addnote"),
+            Remarks(@"Adds a note to an existing contrib (for now only odds are supported)")]
+        public async Task AddNote(int contribKey, [Remainder]string noteText)
+        {
+            await Context.Message.DeleteAsync();
+
+            try
+            {
+                var note = new Note
+                {
+                    AssociatedContribKey = contribKey,
+                    Text = noteText
+                };
+                if (_contribService.Exists(note))
+                {
+                    await ReplyAsync($"Sorry {Context.Message.Author.Username}, this note already exist");
+                    var dropRate = _contribService.FindByContribKey(contribKey) as DropRate;
+                    var result = new DropRateResult
+                    {
+                        ItemName = dropRate.ItemName,
+                        DropRates = new[] { dropRate }
+                    };
+                    await ReplyAsync(result);
+                }
+                else
+                {
+                    // Temporarily only allow adding notes to drop rates
+                    if (!(_contribService.FindByContribKey(contribKey) is DropRate dropRate))
+                    {
+                        await ReplyAsync($"Sorry {Context.Message.Author.Username}, you can only add notes to odds for now");
+                        return;
+                    }
+
+                    await _contribService.AddContrib(note, Context.Message.Author);
+                    await ReplyAsync($"Ok {Context.Message.Author.Username}, the note has been added");
+                }
+            }
+            catch (Exception ex)
+            {
+                var userMessage = $"Sorry {Context.Message.Author.Username}, I was unable to add that note";
+                await HandleErrorAsync(userMessage, ex);
+            }
+        }
+
         [Command("rem"), 
             Remarks("Removes a contribution by its key")]
         [RequireUserPermission(GuildPermission.Administrator, Group = BotPermission.Admin)]
