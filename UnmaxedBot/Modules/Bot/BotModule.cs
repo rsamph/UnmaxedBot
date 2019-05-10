@@ -46,6 +46,15 @@ namespace UnmaxedBot.Modules.Bot
             }
         }
 
+        [Command("say"), Alias("pol"),
+            Remarks("Say something through the bot anonymously")]
+        public async Task Say([Remainder]string text)
+        {
+            await Context.Message.DeleteAsync();
+
+            await ReplyAsync(text);
+        }
+
         [Command("spaghet"), 
             Remarks("Retrieves the bot version and link to the source code")]
         public async Task Spaghet()
