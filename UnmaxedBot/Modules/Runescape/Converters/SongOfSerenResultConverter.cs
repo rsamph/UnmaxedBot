@@ -15,10 +15,10 @@ namespace UnmaxedBot.Modules.Runescape.Converters
 
             var activeSong = result.TimeTable.ActiveSong;
             var nextSong = result.TimeTable.NextSong;
-            var timeRemaining = nextSong.Time.Subtract(SongOfSerenTimeTable.GameTime).Minutes;
+            var timeRemaining = nextSong.Time.Subtract(SongOfSerenTimeTable.GameTime);
 
             description.Append($"Active: {activeSong.SkillingGroup}");
-            description.Append($" ({timeRemaining} minutes remaining)");
+            description.Append($" ({Math.Round(timeRemaining.TotalMinutes)} minutes remaining)");
             var activeSkills = GetSkillsForSkillingGroup(activeSong.SkillingGroup);
             description.Append("```css\n");
             description.Append(string.Join(", ", activeSkills));
