@@ -16,12 +16,14 @@ namespace UnmaxedBot.Modules.Runescape
         private readonly HighscoreService _highscoreService;
         private readonly RegistrationService _registrationService;
         private readonly ClanMemberService _clanMemberService;
+        private readonly SpecialWeekendsService _specialWeekendsService;
 
         public RunescapeModule(
             GrandExchangeService grandExchangeService, 
             HighscoreService highscoreService,
             RegistrationService registrationService,
             ClanMemberService clanMemberService,
+            SpecialWeekendsService specialWeekendsService,
             LogService logService)
             :base(logService)
         {
@@ -29,6 +31,7 @@ namespace UnmaxedBot.Modules.Runescape
             _highscoreService = highscoreService;
             _registrationService = registrationService;
             _clanMemberService = clanMemberService;
+            _specialWeekendsService = specialWeekendsService;
         }
 
         [Command("pc"), 
@@ -117,6 +120,35 @@ namespace UnmaxedBot.Modules.Runescape
         public async Task TopSkills(string playerName = "")
         {
             await Highscore(HighScoreRequestType.TopSkills, playerName);
+        }
+
+        [Command("song"), Alias("seren"),
+            Remarks("Shows skill information about the active song of seren during song of seren weekend")]
+        public async Task SongOfSeren()
+        {
+            await Context.Message.DeleteAsync();
+
+            try
+            {
+                var timeTable = _specialWeekendsService.GetSongOfSerenTimeTable();
+                if (timeTable.IsEventActive)
+                {
+                    var songOfSeren = new SongOfSerenResult()
+                    {
+                        TimeTable = timeTable
+                    };
+                    await ReplyAsync(songOfSeren);
+                }
+                else
+                {
+                    await ReplyAsync($"Sorry {Context.Message.Author.Username}, the song of seren event is currently not active");
+                }
+            }
+            catch (Exception ex)
+            {
+                var userMessage = $"Sorry {Context.Message.Author.Username}, I was unable to find any information about this event";
+                await HandleErrorAsync(userMessage, ex);
+            }
         }
 
         private async Task Highscore(HighScoreRequestType requestType, string playerName = "")
